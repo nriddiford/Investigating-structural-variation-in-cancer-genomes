@@ -18,11 +18,13 @@ Applying both sliding-window and clustering strategies, it uses anomalously mapp
 
 First, we need to create a file `genome.len` containing information about the number, name and length of each chromosome. This must have the following format: 
 
-```[Chr #]\t[Chr name]\t[Length]
+```
+[Chr #]\t[Chr name]\t[Length]
 1	2L	3000000
 2	2R	4000000
 3	3L	5000000
-...```
+...
+```
 
 Next, we need to make config files for both the tumour and refernce samples that will be used for each step in the analysis. The [SVDetect manual](http://svdetect.sourceforge.net/Site/Manual.html) contains a thorough description of the options for each block 
 

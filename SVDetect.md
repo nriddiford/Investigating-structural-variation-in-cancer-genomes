@@ -225,7 +225,7 @@ The only change I've made to the default setting (other than mu and sigma) reall
 
 Filtering output contains the following fields: 
 
-For 1-16. Fields with the same format of the linking procedure output. 
+1-16. Fields with the same format of the linking procedure output. 
 If order_filtering=1, the fields 8-16 are surrounded by "()" to highlight potential subgroups of reads. Pairs with features followed by :
   * "$" indicates pairs in a read (sub)group involved in an inconsistent orientation 
   * "*" indicates pairs in a read (sub)group with an inconsistent order 

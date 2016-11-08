@@ -39,7 +39,7 @@ We also need to create a file called `genome.len` with the number, name and leng
 ...
 ```
 
-We need to make a config file for both the tumour and reference samples that will be used for each step in the analysis. The [SVDetect manual](http://svdetect.sourceforge.net/Site/Manual.html) contains a thorough description of the options for each block 
+We need to make a config file for both the sample (tumour) and reference samples that will be used for each step in the analysis. The [SVDetect manual](http://svdetect.sourceforge.net/Site/Manual.html) contains a thorough description of the options for each block 
 
 sample config example:
  
@@ -103,14 +103,6 @@ circos_output=1
 bed_output=1
 sv_output=1
 </compare>
-```
-
-The lines that need to be changed for running with different samples are: 
-
-```
-mates_file
-list_samples
-file_suffix
 ```
 
 A similar file needs to be created for the reference sample. 

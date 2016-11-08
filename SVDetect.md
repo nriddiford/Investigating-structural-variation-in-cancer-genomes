@@ -136,15 +136,6 @@ Now, create a bash script to tie them all together:
 ```{bash}
 #!/bin/bash
 
-#PBS -l nodes=1:ppn=8
-#PBS -l walltime=01:00:00
-#PBS -l mem=500mb
-#PBS -N SVDetect_HUM-1vs3
-#PBS -o /data/kdi_prod/project_result/948/01.00/Analysis/Trimmo_out/Bwa_test/Bwa_full/X/SVDetect
-#PBS -e /data/kdi_prod/project_result/948/01.00/Analysis/Trimmo_out/Bwa_test/Bwa_full/X/SVDetect
-#PBS -m bea
-
-
 WORK_DIR=/data/kdi_prod/project_result/948/01.00/Analysis/Trimmo_out/Bwa_test/Bwa_full/X/SVDetect
 
 #Generation and filtering of links from the sample data

@@ -170,6 +170,7 @@ Each column contains the follwoing information:
 15. Sequencing start coordinates of the first group of paired-end reads
 16. Sequencing start coordinates of the second group of paired-end reads
 
+
 The first few lines of the output I get for my sample are as follows: 
 
 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 |

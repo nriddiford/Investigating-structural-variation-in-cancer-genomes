@@ -49,11 +49,12 @@ sample config example:
 input_format=bam 
 sv_type=all
 mates_orientation=RF
+# Change the next 5 lines accordingly
 read1_length=125
 read2_length=125
-mates_file=/path/to/sample.sorted.ab.bam
-cmap_file=/path/to/genome.len
-output_dir=/path/to/results
+mates_file=/path/to/sample.sorted.ab.bam										
+cmap_file=/path/to/genome.len													
+output_dir=/path/to/results														
 tmp_dir=tmp
 num_threads=2
 </general>
@@ -92,6 +93,7 @@ sigma_length=233
 </bed>
 
 <compare>
+# Change the next 3 lines accordingly
 list_samples=sample.sorted,reference.sorted
 list_read_lengths=125-125,125-125
 file_suffix=.ab.bam.all.links.filtered
@@ -136,7 +138,7 @@ Now, create a bash script to tie them all together:
 ```{bash}
 #!/bin/bash
 
-WORK_DIR=/data/kdi_prod/project_result/948/01.00/Analysis/Trimmo_out/Bwa_test/Bwa_full/X/SVDetect
+WORK_DIR=/path/to/config/files
 
 #Generation and filtering of links from the sample data
 #SVDetect linking filtering -conf ${WORK_DIR}/sample.sv.conf

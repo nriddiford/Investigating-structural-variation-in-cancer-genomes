@@ -17,6 +17,8 @@ Applying both sliding-window and clustering strategies, it uses anomalously mapp
 * Duplications
 * Balanced and unbalanced inter-chromosomal translocations
 
+This is achieved through the following steps:
+
 ### Linking
 Starting from a list of anomalously mapped paired-end reads, SVDetect uses a sliding-window strategy to identify all groups of pairs sharing a similar genomic location. The reference genome is divided into overlapping windows of fixed size, and each pair of windows can possibly form a link if at least one pair anchors them by its ends.
 
@@ -144,6 +146,35 @@ Redundant links are filtered out and the precise coordinates of the remaining un
 Generation and filtering of links from the sample data
 
 ```SVDetect linking filtering -conf sample.sv.conf```
+```SVDetect linking filtering -conf reference.sv.conf```
+
+The output file is tabulated output listing all of the chromosomal links (i.e. both inter- and intrachromosomal)  
+
+Each column contains the follwoing information: 
+
+1. Chromosome name of the first group of paired-end reads (=chromosome1)
+2. Chromosome1 start coordinate of the link
+3. Chromosome1 end coordinate of the link
+4. Chromosome name of the second group of paired-end reads (=chromosome2)
+5. Chromosome2 start coordinate of the link
+6. Chromosome2 end coordinate of the link
+7. Number of mate-pairs in the chromosome link
+8. Name list of the mate-pairs
+9. Strand orientation list of the first group of paired-end reads
+10.Strand orientation list of the second group of paired-end reads
+11. Rank position of the read compared to its mate in the first group of paired-ends
+(1 or 2, correspond to F3 or R3 for SOLiD data)
+12. Rank position of the read compared to its mate in the second group of paired-ends
+13. Read order of the first group of paired-ends
+14. Read order of the second group of paired-ends according to the first group order
+15. Sequencing start coordinates of the first group of paired-end reads
+16. Sequencing start coordinates of the second group of paired-end reads
+
+The first few lines of the output I get for my sample are as follows: 
+
+| 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 |
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+
 
 
 

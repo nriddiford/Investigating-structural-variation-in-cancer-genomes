@@ -3,7 +3,7 @@
 # Table of Contents
 * [About the tool](#about-the-tool)
 * [Protocol](#protocol)
-  * [Linking](#linking)
+  * [Linking and filtering](#linking_and_filtering)
   * [Filtering](#filtering)	
 * [SVDetect commands](#svdetect_commands)
   * [Linking](#linking)
@@ -95,7 +95,7 @@ split_link_file=0
 strand_filtering=1
 order_filtering=1
 insert_size_filtering=1
-nb_pairs_threshold=2
+nb_pairs_threshold=5
 nb_pairs_order_threshold=2
 indel_sigma_threshold=3
 dup_sigma_threshold=2
@@ -137,7 +137,7 @@ A similar file needs to be created for `reference.sv.conf`.
 Each different command used the information we've entered in our `sample.sv.conf` and `reference.sv.conf` files.  
 Below, I will discuss each of these in turn and provide quoted details from the [SVDetect sourceforge manual](http://svdetect.sourceforge.net/Site/Manual.html)  
 
-### Linking
+### Linking and filtering
 
 Main program for mapping all anomalous mapped paired-end reads onto a fragmented reference genome. First, the reference genome is partitioned into small genomic overlapped regions (typically twice the maximum distance insert size between ends). Each pair is then assigned to at least one possible pair of two chromosomal regions. Two genomic regions connected by the mapped ends of pairs is considered as a link. 
 Redundant links are filtered out and the precise coordinates of the remaining unique links are determined. After a appropriate sorting procedure, the program proceeds to the union of close overlapped links.
@@ -148,12 +148,14 @@ Generation and filtering of links from the sample data
 ```SVDetect linking filtering -conf sample.sv.conf```
 ```SVDetect linking filtering -conf reference.sv.conf```
 
-The output file is tabulated output listing all of the chromosomal links (i.e. both inter- and intrachromosomal)  
+The output file is tabulated output listing all of the chromosomal links (i.e. both inter- and intrachromosomal)
+
+One file gives all the links `.all.links` and another gives the links after fiterering using the defined parameters `all.links.filtered`
 
 Each column contains the follwoing information: 
 
 1. Chromosome name of the first group of paired-end reads (=chromosome1)
-2. Chromosome1 start coordinate of the link
+2. Chromosome1 start coordinate of the link 
 3. Chromosome1 end coordinate of the link
 4. Chromosome name of the second group of paired-end reads (=chromosome2)
 5. Chromosome2 start coordinate of the link
@@ -170,21 +172,41 @@ Each column contains the follwoing information:
 15. Sequencing start coordinates of the first group of paired-end reads
 16. Sequencing start coordinates of the second group of paired-end reads
 
+**Note** All positions are 1-based coordinates
 
-The first few lines of the output I get for my sample are as follows: 
+The first few lines of the `.all.links` file I get for my `sample` are as follows: 
 
 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 |
 |:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
 | 2L | 74 | 198 | 2L | 11968895 | 11969019 | 1 | HWI-D00405:129:C6KNAANXX:4:1215:15111:95983 | F | F | 2 | 1 | 1 | 1 | 74 | 11968895 |
 | 2L | 112 | 236 | 2L | 2934154 | 2934278 | 2 | HWI-D00405:129:C6KNAANXX:4:1205:3258:73512,HWI-D00405:129:C6KNAANXX:4:1211:1294:50458 | F,F | F,F | 1,1 | 2,2 | 1,2 | 1,2 | 112,112 | 2934154,2934154 |
 
+These describe two interchromosomal translocations on chromosome 2L. The first is supported by one read pair, and the second by two.  
 
+##### Filtering
 
+The filtering procedure of SVDetect takes as input all links previously identified and uses user-defined filtering parameter values to call PEM clusters. The minimum number of paired-ends is one of the most important filtering parameters to call a cluster. Use of such a threshold improves confidence in the detection of SVs.
 
+Let's have a look at the filtering section of out `sample.sv.conf` file: 
 
+```sed -n '/<filtering>/,/<\/filtering>/p' sample.sv.conf```
 
+<filtering>
+split_link_file=0
+strand_filtering=1
+order_filtering=1
+insert_size_filtering=1
+nb_pairs_threshold=5
+nb_pairs_order_threshold=2
+indel_sigma_threshold=3
+dup_sigma_threshold=2
+singleton_sigma_threshold=4
+final_score_threshold=0.8
+mu_length=2941
+sigma_length=233
+</filtering>
 
-
+The only change I've made to the default setting really is the `-- nb_pairs_threshold` option. Here, I specify that there must a minimum of 5 pairs in a cluster (more conservative). Therefore, the two SVs identified in the `sample.all.links` file are not present in the `sample.all.links.filtered` file.
 
 
 

@@ -230,21 +230,25 @@ If order_filtering=1, the fields 8-16 are surrounded by "()" to highlight potent
   * "*" indicates pairs in a read (sub)group with an inconsistent order 
   * "@" indicates pairs in a read (sub)group with an inconsistent insert size
 * 17. Strand orientation feature of pairs after strand filtering running. If order_size_filtering=1 and/or insert_size_filtering=1,this field is replaced by the predicted type of intra-/intra-chromosomal SV
+* 18. Mean separation distance if insert_size_filtering=1. 
+* 19. Number of pairs after strand filtering / previous number of pairs
+* 20. Balanced or unbalanced feature for order filtering
+* 21. Number of pairs after order filtering / previous number of pairs
+* 22. Number of pairs after insert size filtering / previous number of pairs
+* 23. Subgroup coordinates of chromosome 1 if order_filtering=1
+  * if UNBAL: predicted start and end coordinates of the concerned region for chromosome1
+  * if BAL: start and end breakpoint coordinates for chromosome1
+  The field is surrounded by "()" to highlight potential subgroups of reads
+* 24. As 23. but for chromosome2
+* 25. Score based on ratios from 18., 21. and 22. (best score=1)
+* 26. Initial number of pairs (before applying filters)
 
-The first 17 fields of the first 2 lines of `sample.all.links.filtered` contain: 
+The first 2 lines of `sample.all.links.filtered` contain: 
 
-| 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 |
-|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| 2L | 112 | 236 | 2L | 2934154 | 2934278 | 2 | (HWI-D00405:129:C6KNAANXX:4:1205:3258:73512,HWI-D00405:129:C6KNAANXX:4:1211:1294:50458) | (F,F) | (F,F) | (1,1) | (2,2) | (1,2) | (1,2) | (112,112) | (2934154,2934154) | INVERSION | 2934042 | 2/2 | UNBAL | 2/2 | (1,112) | (2930617,2934154) | 1 | 2 |
-| 2L | 304 | 428 | 2L | 11925560 | 11925684 | 3 | (HWI-D00405:129:C6KNAANXX:4:1116:19258:32222,HWI-D00405:129:C6KNAANXX:4:2212:15361:3516,HWI-D00405:129:C6KNAANXX:4:2304:9570:39544) | (F,F,F) | (F,F,F) | (2,2,2) | (1,1,1) | (1,2,3) | (1,2,3) | (304,304,304) | (11925560,11925560,11925560) | INVERSION | 11925256 | 3/3 | UNBAL | 3/3 | (1,304) | (11922023,11925560) | 1 | 3 |
-
-There are several additional fields that are also included which I guess relate to the the prediction of the type of intra-/intra-chromosomal SV. In this case, both are predicted to be unbalanced translocations 
-
-| 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 |
-|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| 2934042 | 2/2 | UNBAL | 2/2 | (1,112) | (2930617,2934154) | 1 | 2 |
-| 11925256 | 3/3 | UNBAL | 3/3 | (1,304) | (11922023,11925560) | 1 | 3 |
-
+| 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 |
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| 2L | 112 | 236 | 2L | 2934154 | 2934278 | 2 | (HWI-D00405:129:C6KNAANXX:4:1205:3258:73512,HWI-D00405:129:C6KNAANXX:4:1211:1294:50458) | (F,F) | (F,F) | (1,1) | (2,2) | (1,2) | (1,2) | (112,112) | (2934154,2934154) | INVERSION | 2934042 | 2/2 | UNBAL | 2/2 | (1,112) | (2930617,2934154) | 1 | 2 | 2934042 | 2/2 | UNBAL | 2/2 |  | (1,112) | (2930617,2934154) | 1 | 2 |
+| 2L | 304 | 428 | 2L | 11925560 | 11925684 | 3 | (HWI-D00405:129:C6KNAANXX:4:1116:19258:32222,HWI-D00405:129:C6KNAANXX:4:2212:15361:3516,HWI-D00405:129:C6KNAANXX:4:2304:9570:39544) | (F,F,F) | (F,F,F) | (2,2,2) | (1,1,1) | (1,2,3) | (1,2,3) | (304,304,304) | (11925560,11925560,11925560) | INVERSION | 11925256 | 3/3 | UNBAL | 3/3 |  | (1,304) | (11922023,11925560) | 1 | 3 | 11925256 | 3/3 | UNBAL | 3/3 | (1,304) | (11922023,11925560) | 1 | 3 |
 
 
 

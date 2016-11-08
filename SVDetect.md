@@ -3,6 +3,11 @@
 # Table of Contents
 * [About the tool](#about-the-tool)
 * [Protocol](#protocol)
+    * [Linking](#linking)
+    * [Filtering](#filtering)
+	
+* [SVDetect commands](#svdetect_commands)
+    * [Linking](#linking)
 * [Output](#output)
 
 ## About the tool
@@ -13,11 +18,24 @@ Applying both sliding-window and clustering strategies, it uses anomalously mapp
 * Duplications
 * Balanced and unbalanced inter-chromosomal translocations
 
-Starting from a list of such anomalously mapped paired-end reads, SVDetect uses a sliding-window strategy to identify all groups of pairs sharing a similar genomic location. The reference genome is divided into overlapping windows of fixed size, and each pair of windows can possibly form a link if at least one pair anchors them by its ends.
+### Linking
+Starting from a list of anomalously mapped paired-end reads, SVDetect uses a sliding-window strategy to identify all groups of pairs sharing a similar genomic location. The reference genome is divided into overlapping windows of fixed size, and each pair of windows can possibly form a link if at least one pair anchors them by its ends.
+
+To each link connecting two genomic fragments, a certain number of features such as chromosomal location, number of pairs, orientation and order of the involved paired-ends are assigned.
+
+
+### Filtering
+The filtering procedure of SVDetect takes as input all links previously identified and uses user-defined filtering parameter values to call PEM clusters.
+
 
 ## Protocol
 
 The first step in SVDetect is to regroup all pairs that are suspected to originate from the same SV.
+
+**Important**: for clustering analysis, the mate_file must contain anomalously mapped paired-ends only. 
+Correct mapped pairs (same chromosome, correct strand orientation and good range of insert size, etc.) have to be filtered out with a preprocessing step. 
+For this we use a perl script for preprocessing pairs provided in the SVDetect package "BAM_preprocessingPairs.pl" (SAM/BAM file format only).  
+
 The input consists of paired-ends mapped to the reference genome, and the output will contain pairs where either the orientation of pairs is incorrect and/or the distance between them is out of the typical range.
 
 ```perl /bioinfo/guests/nriddifo/bin/BAM_preprocessingPairs.pl <sample.sorted.bam>```
@@ -28,20 +46,26 @@ and for the reference:
 
 This will create a file containing the aberrant reads for each .bam file: `sample.sorted.ab.bam` and `reference.sorted.bam`, which we then point to in config files.
 
-We also need to create a file called `genome.len` with the number, name and length of each chromosome. This information can be found in the first two columns of the genome.fa.fai file (created by `samtools faidx genome.fa`). `genome.len` must have the following format: 
+We also need to create a file called `genome.len` with the number, name and length of each chromosome. This information can be found in the first two columns of the genome.fa.fai file (created by `samtools faidx genome.fa`). The columns are: chromosome ID (sequential integer starting from 1), chromosome name (the same as indicated in the mate_file), and the chromosome length in bases.
 
+For Dmel_6.12:
 
 ```
-[Chr #]\t[Chr name]\t[Length]
-1	2L	3000000
-2	2R	4000000
-3	3L	5000000
-...
+[Chr ID]\t[Chr name]\t[Length]
+1       2L      23513712
+2       2R      25286936
+3       3L      28110227
+4       3R      32079331
+5       4       1348131
+6       X       23542271
+7       Y       3667352
 ```
 
-We need to make a config file for both the sample (tumour) and reference samples that will be used for each step in the analysis. The [SVDetect manual](http://svdetect.sourceforge.net/Site/Manual.html) contains a thorough description of the options for each block 
+We need to make a config file for both the sample (tumour) and reference samples that will be used for each step in the analysis. The [SVDetect manual](http://svdetect.sourceforge.net/Site/Manual.html) contains a thorough description of the options for each block. 
 
-sample config example:
+Call these `sample.sv.conf` and `reference.sv.conf`. 
+
+`sample.sv.conf` example:
  
 
 ``` bash
@@ -105,12 +129,22 @@ sv_output=1
 </compare>
 ```
 
-A similar file needs to be created for the reference sample. 
+A similar file needs to be created for `reference.sv.conf`. 
+
+# SVDetect commands
+
+Each different command used the information we've entered in our `sample.sv.conf` and `reference.sv.conf` files.  
+Below, I will discuss each of these in turn and provide quoted details from the [SVDetect sourceforge manual](http://svdetect.sourceforge.net/Site/Manual.html)  
+
+### Linking
+
+Main program for mapping all anomalous mapped paired-end reads onto a fragmented reference genome. First, the reference genome is partitioned into small genomic overlapped regions (typically twice the maximum distance insert size between ends). Each pair is then assigned to at least one possible pair of two chromosomal regions. Two genomic regions connected by the mapped ends of pairs is considered as a link. 
+Redundant links are filtered out and the precise coordinates of the remaining unique links are determined. After a appropriate sorting procedure, the program proceeds to the union of close overlapped links.
 
 
+Generation and filtering of links from the sample data
 
-
-
+```SVDetect linking filtering -conf sample.sv.conf```
 
 
 

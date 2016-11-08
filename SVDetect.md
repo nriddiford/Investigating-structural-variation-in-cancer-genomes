@@ -121,13 +121,13 @@ sigma_length=832
 
 <bed>
 <colorcode>
-190,190,190 = 1,2
-0,0,0       = 3,3
-0,0,255     = 4,4
-0,255,0     = 5,5
-153,50,205  = 6,7
-255,140,0  = 8,10
-255,0,0     = 11,10000
+190,190,190 = 1,2 # grey
+0,0,0       = 3,3 # black
+0,0,255     = 4,4 # blue
+0,255,0     = 5,5 # green
+153,50,205  = 6,7 # purple
+255,140,0  = 8,10 # orange
+255,0,0     = 11,10000 # red
 </colorcode>
 </bed>
 
@@ -138,13 +138,14 @@ list_read_lengths=125-125,125-125
 file_suffix=.ab.bam.all.links.filtered
 min_overlap=0.05
 same_sv_type=1
-circos_output=1
+# skip for now
+circos_output=0
 bed_output=1
 sv_output=1
 </compare>
 ```
 
-A similar file needs to be created for `reference.sv.conf`. 
+The reference config file `reference.sv.conf` will look similar, but doesn't need the `<compare>` block. 
 
 # SVDetect commands
 
@@ -157,7 +158,7 @@ Main program for mapping all anomalous mapped paired-end reads onto a fragmented
 Redundant links are filtered out and the precise coordinates of the remaining unique links are determined. After a appropriate sorting procedure, the program proceeds to the union of close overlapped links.
 
 
-Generation and filtering of links from the sample data
+Generation and filtering of links from the sample data:
 
 ```SVDetect linking filtering -conf sample.sv.conf```
 ```SVDetect linking filtering -conf reference.sv.conf```
@@ -251,37 +252,64 @@ The first 2 lines of `sample.all.links.filtered` contain:
 | 2L | 304 | 428 | 2L | 11925560 | 11925684 | 3 | (HWI-D00405:129:C6KNAANXX:4:1116:19258:32222,HWI-D00405:129:C6KNAANXX:4:2212:15361:3516,HWI-D00405:129:C6KNAANXX:4:2304:9570:39544) | (F,F,F) | (F,F,F) | (2,2,2) | (1,1,1) | (1,2,3) | (1,2,3) | (304,304,304) | (11925560,11925560,11925560) | INVERSION | 11925256 | 3/3 | UNBAL | 3/3 | - | (1,304) | (11922023,11925560) | 1 | 3 |
 
 
+In my file field 22 appears to be missing for some reason. I've added a `-` to reflect that here.
+
+
+### Link comparison between datasets
+
+Here we can use the `linkstocomapre` program to compare filtered links between two or more anomalously mapped mate-pair datasets and to identify common and sample-specific chromosomal links (like the usual sample/reference design).
+Overlaps between link coordinates are used to filter the set of potential SVs.
+
+`SVDetect links2compare -conf sample.sv.conf`
+
+If comparing two samples like we are here this will generate the following files for each output type you specifiy in the `<compare>` block (prefix_suffix only): 
+  * sample.reference_compared 
+  * sample_compared
+  * reference_compared 
+
+We only asked for bed and sv output, so this produces 9 files in total.
+
+Some of these can be viewed as tracks in IGV for example. 
+
+`bedtools sort -sizeA -i sample_compared.bed > sample_compared_sorted.bed`
+`bgzip sample_compared_sorted.bed`
 
 
 
+### Depth-of-coverage analysis
 
-Now, create a bash script to tie them all together: 
+Create a new `config` file the sample only: 
 
-```{bash}
-#!/bin/bash
+<general>
+input_format=bam
+sv_type=all
+mates_orientation=RF
+read1_length=125
+read2_length=125
+mates_file=/path/to/sample.sorted.ab.bam										
+cmap_file=/path/to/genome.len													
+output_dir=/path/to/results	
+tmp_dir=tmp
+num_threads=2
+</general>
 
-WORK_DIR=/path/to/config/files
+<detection>
+split_mate_file=1
+window_size=30000^M
+step_length=10000
+mates_file_ref=/path/to/reference/original.bam
+</detection>
 
-#Generation and filtering of links from the sample data
-#SVDetect linking filtering -conf ${WORK_DIR}/sample.sv.conf
-
-#Generation and filtering of links from the reference data
-#SVDetect linking filtering -conf ${WORK_DIR}/reference.sv.conf
-
-#Comparison of links between the two datasets
-#SVDetect links2compare -conf ${WORK_DIR}/sample.sv.conf
-
-# Convert to bed format
-#SVDetect links2bed -conf ${WORK_DIR}/sample.sv.conf
-
-#Calculation of depth-of-coverage log-ratios
-SVDetect cnv ratio2circos ratio2bedgraph -conf ${WORK_DIR}/sample.cnv.conf
-
-#Visualization of filtered links and copy-number profiles in Circos
-#circos -conf circos/sample.circos.conf
-```
-
+**Important** make sure that the `-- mates_file_ref` option in the `<coverage>` block links to the _original_ bam file of the _reference_ (before processing with `BAM_preprocessingPairs.pl`)
 
 
+`SVDetect cnv links2bed -conf sample.sv.conf`
 
+This produces a tabulated-text file listing coverage data of regions sized by the <window_size> parameter with the following fields:
 
+1. Chromosome name
+2. Chromosome start coordinate
+3. Chromosome end coordinate
+4. Average depth-of-coverage from the sample mate-pair data
+5. Average depth-of-coverage from the reference mate-pair data
+6. Log-ratio of 4. and 5. values*

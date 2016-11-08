@@ -3,11 +3,10 @@
 # Table of Contents
 * [About the tool](#about-the-tool)
 * [Protocol](#protocol)
-    * [Linking](#linking)
-    * [Filtering](#filtering)
-	
+  * [Linking](#linking)
+  * [Filtering](#filtering)	
 * [SVDetect commands](#svdetect_commands)
-    * [Linking](#linking)
+  * [Linking](#linking)
 * [Output](#output)
 
 ## About the tool

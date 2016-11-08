@@ -2,7 +2,6 @@
 
 # Table of Contents
 * [About the tool](#about-the-tool)
-* [Input](#input)
 * [Protocol](#protocol)
 * [Output](#output)
 
@@ -14,9 +13,18 @@ Applying both sliding-window and clustering strategies, it uses anomalously mapp
 * Duplications
 * Balanced and unbalanced inter-chromosomal translocations
 
-## Input
+## Protocol
 
-First, we need to create a file `genome.len` containing information about the number, name and length of each chromosome. This must have the following format: 
+The first step in SVDetect is to regroup all pairs that are suspected to originate from the same SV.
+The input consists of paired-ends mapped to the reference genome, and the output will contain pairs where either the orientation of pairs is incorrect and/or the distance between them is out of the typical range.
+
+
+```perl /bioinfo/guests/nriddifo/bin/BAM_preprocessingPairs.pl <file.sorted.bam>```
+
+Starting from a list of such anomalously mapped paired-end reads, SVDetect uses a sliding-window strategy to identify all groups of pairs sharing a similar genomic location. The reference genome is divided into overlapping windows of fixed size, and each pair of windows can possibly form a link if at least one pair anchors them by its ends. 
+
+We also need to create a file called `genome.len` with the number, name and length of each chromosome. This information can be found in the first two columns of the genome.fa.fai file (created by `samtools faidx genome.fa`). `genome.len` must have the following format: 
+
 
 ```
 [Chr #]\t[Chr name]\t[Length]
@@ -26,9 +34,9 @@ First, we need to create a file `genome.len` containing information about the nu
 ...
 ```
 
-Next, we need to make config files for both the tumour and refernce samples that will be used for each step in the analysis. The [SVDetect manual](http://svdetect.sourceforge.net/Site/Manual.html) contains a thorough description of the options for each block 
+Next, we need to make config files for both the tumour and reference samples that will be used for each step in the analysis. The [SVDetect manual](http://svdetect.sourceforge.net/Site/Manual.html) contains a thorough description of the options for each block 
 
-sample config example given below:
+sample config example:
 
 
 ``` bash

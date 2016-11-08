@@ -118,9 +118,15 @@ The first step in SVDetect is to regroup all pairs that are suspected to origina
 The input consists of paired-ends mapped to the reference genome, and the output will contain pairs where either the orientation of pairs is incorrect and/or the distance between them is out of the typical range.
 
 
-```perl /bioinfo/guests/nriddifo/bin/BAM_preprocessingPairs.pl <file.sorted.bam>```
+```perl /bioinfo/guests/nriddifo/bin/BAM_preprocessingPairs.pl <sample.sorted.bam>```
 
-Next, we need to make config files for both the tumour and refernce samples that will be used for each step in the analysis. The [SVDetect manual](http://svdetect.sourceforge.net/Site/Manual.html) contains a thorough description of the options for each block 
+and for the reference: 
+
+```perl /bioinfo/guests/nriddifo/bin/BAM_preprocessingPairs.pl <reference.sorted.bam>```
+
+This will create a file containing the aberrant reads for each .bam file: `sample.sorted.ab.bam` and `reference.sorted.bam`, which we then point to in config files.
+
+We need to make a config file for both the tumour and reference samples that will be used for each step in the analysis. The [SVDetect manual](http://svdetect.sourceforge.net/Site/Manual.html) contains a thorough description of the options for each block 
 
 sample config example given below:
 
@@ -132,9 +138,9 @@ sv_type=all
 mates_orientation=RF
 read1_length=125
 read2_length=125
-mates_file=/data/kdi_prod/project_result/948/01.00/Analysis/Trimmo_out/Bwa_test/Bwa_full/X/SVDetect/HUM-1_PE_sorted_X.ab.bam
-cmap_file=/data/kdi_prod/project_result/948/01.00/Analysis/Trimmo_out/Bwa_test/Bwa_full/X/SVDetect/genome.len
-output_dir=/data/kdi_prod/project_result/948/01.00/Analysis/Trimmo_out/Bwa_test/Bwa_full/X/SVDetect/results
+mates_file=/path/to/sample.sorted.ab.bam
+cmap_file=/path/to/genome.len
+output_dir=/path/to/results
 tmp_dir=tmp
 num_threads=2
 </general>
@@ -173,7 +179,7 @@ sigma_length=233
 </bed>
 
 <compare>
-list_samples=HUM-1_PE_sorted_X,HUM-3_PE_sorted_X
+list_samples=sample.sorted,reference.sorted
 list_read_lengths=125-125,125-125
 file_suffix=.ab.bam.all.links.filtered
 min_overlap=0.05
@@ -187,12 +193,9 @@ sv_output=1
 The lines that need to be changed for running with different samples are: 
 
 ```
-mates_file=/data/kdi_prod/project_result/948/01.00/Analysis/Trimmo_out/Bwa_test/Bwa_full/X/SVDetect/HUM-1_PE_sorted_X.ab.bam
-cmap_file=/data/kdi_prod/project_result/948/01.00/Analysis/Trimmo_out/Bwa_test/Bwa_full/X/SVDetect/genome.len
-output_dir=/data/kdi_prod/project_result/948/01.00/Analysis/Trimmo_out/Bwa_test/Bwa_full/X/SVDetect/results
-list_samples=HUM-1_PE_sorted_X,HUM-3_PE_sorted_X
-list_read_lengths=125-125,125-125
-file_suffix=.ab.bam.all.links.filtered
+mates_file
+list_samples
+file_suffix
 ```
 
 A similar file needs to be created for the reference sample. 

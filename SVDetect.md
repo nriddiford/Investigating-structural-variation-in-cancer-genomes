@@ -230,20 +230,19 @@ If order_filtering=1, the fields 8-16 are surrounded by "()" to highlight potent
   * "$" indicates pairs in a read (sub)group involved in an inconsistent orientation 
   * "*" indicates pairs in a read (sub)group with an inconsistent order 
   * "@" indicates pairs in a read (sub)group with an inconsistent insert size
-
-17. Strand orientation feature of pairs after strand filtering running. If order_size_filtering=1 and/or insert_size_filtering=1,this field is replaced by the predicted type of intra-/intra-chromosomal SV
-18. Mean separation distance if insert_size_filtering=1. 
-19. Number of pairs after strand filtering / previous number of pairs
-20. Balanced or unbalanced feature for order filtering
-21. Number of pairs after order filtering / previous number of pairs
-22. Number of pairs after insert size filtering / previous number of pairs
-23. Subgroup coordinates of chromosome 1 if order_filtering=1
+* 17. Strand orientation feature of pairs after strand filtering running. If order_size_filtering=1 and/or insert_size_filtering=1,this field is replaced by the predicted type of intra-/intra-chromosomal SV
+* 18. Mean separation distance if insert_size_filtering=1. 
+* 19. Number of pairs after strand filtering / previous number of pairs
+* 20. Balanced or unbalanced feature for order filtering
+* 21. Number of pairs after order filtering / previous number of pairs
+* 22. Number of pairs after insert size filtering / previous number of pairs
+* 23. Subgroup coordinates of chromosome 1 if order_filtering=1
   * if UNBAL: predicted start and end coordinates of the concerned region for chromosome1
   * if BAL: start and end breakpoint coordinates for chromosome1
   The field is surrounded by "()" to highlight potential subgroups of reads
-24. As 23. but for chromosome2
-25. Score based on ratios from 18., 21. and 22. (best score=1)
-26. Initial number of pairs (before applying filters)
+* 24. As 23. but for chromosome2
+* 25. Score based on ratios from 18., 21. and 22. (best score=1)
+* 26. Initial number of pairs (before applying filters)
 
 The first 2 lines of `sample.all.links.filtered` contain: 
 

@@ -160,8 +160,8 @@ Each column contains the follwoing information:
 6. Chromosome2 end coordinate of the link
 7. Number of mate-pairs in the chromosome link
 8. Name list of the mate-pairs
-9. Strand orientation list of the first group of paired-end reads  
-10.Strand orientation list of the second group of paired-end reads
+9. Strand orientation list of the first group of paired-end reads
+10. Strand orientation list of the second group of paired-end reads
 11. Rank position of the read compared to its mate in the first group of paired-ends
 (1 or 2, correspond to F3 or R3 for SOLiD data)
 12. Rank position of the read compared to its mate in the second group of paired-ends

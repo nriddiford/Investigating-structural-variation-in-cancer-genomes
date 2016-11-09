@@ -269,7 +269,43 @@ If comparing two samples like we are here this will generate the following files
 
 We only asked for bed and sv output, so this produces 9 files in total.
 
+Each line in the bed file corresponds to one mate-pair for intra-chromosomal links or one paire-end read for inter-chromosomal links:
+
+1. Chromosome name pre-fixed with "chr"
+2. Chromosome start coordinate (0-based)
+3. Chromosome end coordinate
+4. pair/read name (for reads /1 or /2 is added to distinguish the two ends)
+5. score field set to 0
+6. strand orientation (+ or -)
+7. as 2.
+8. as 3.
+9. color associated to the number of pairs involved in the link. If the pair/read is involved in more than one link,
+the associated color is set to the link having the highest number of pairs
+10. =1 for pairs, = 2 for reads
+11. read length(s)
+12. relative start coordinates of reads (=0 for pairs)
+
+First, sort the bedfile: 
+
+`sort -k1,1V -k2,2n sample.bed > sample_sort.bed`
+
+The first few lines of my sorted bed file look like this: 
+
+| 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 |
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| chr2L | 111 | 2934278 | HWI-D00405:129:C6KNAANXX:4:1205:3258:73512 | 0 | + | 111 | 2934278 | 190,190,190 | 2 | 125,125 | 0,2934042 |
+| chr2L | 111 | 2934278 | HWI-D00405:129:C6KNAANXX:4:1211:1294:50458 | 0 | + | 111 | 2934278 | 190,190,190 | 2 | 125,125 | 0,2934042 |
+| chr2L | 226 | 351 | HWI-D00405:129:C6KNAANXX:4:1306:2535:23276/1 | 0 | + | 226 | 351 | 190,190,190 | 1 | 125 | 0 |
+| chr2L | 226 | 351 | HWI-D00405:129:C6KNAANXX:4:1306:9513:42157/1 | 0 | + | 226 | 351 | 190,190,190 | 1 | 125 | 0 |
+| chr2L | 303 | 11925684 | HWI-D00405:129:C6KNAANXX:4:1116:19258:32222 | 0 | + | 303 | 11925684 | 0,0,0 | 2 | 125,125 | 0,11925256 |
+
+
+
+
+
 Some of these can be viewed as tracks in IGV for example. 
+
+
 
 `bedtools sort -sizeA -i sample_compared.bed > sample_compared_sorted.bed`
 `bgzip sample_compared_sorted.bed`

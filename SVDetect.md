@@ -299,8 +299,20 @@ The first few lines of my sorted bed file look like this:
 | chr2L | 226 | 351 | HWI-D00405:129:C6KNAANXX:4:1306:9513:42157/1 | 0 | + | 226 | 351 | 190,190,190 | 1 | 125 | 0 |
 | chr2L | 303 | 11925684 | HWI-D00405:129:C6KNAANXX:4:1116:19258:32222 | 0 | + | 303 | 11925684 | 0,0,0 | 2 | 125,125 | 0,11925256 |
 
-
-
+Another look at out `<bed><coverage>` block will give us info on the colours (comments added): 
+	
+```<bed>
+<colorcode>
+190,190,190 = 1,2 # grey
+0,0,0       = 3,3 # black
+0,0,255     = 4,4 # blue
+0,255,0     = 5,5 # green
+153,50,205  = 6,7 # purple
+255,140,0  = 8,10 # orange
+255,0,0     = 11,10000 # red
+</colorcode>
+</bed>	
+```
 
 
 Some of these can be viewed as tracks in IGV for example. 

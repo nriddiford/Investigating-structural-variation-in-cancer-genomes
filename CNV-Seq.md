@@ -5,7 +5,6 @@
 * [Input](#input)
   * [Hits files](#hits-file)
 * [Run CNV-Seq](#cnv-seq)
-  * [Linking and filtering](#linking-and-filtering)
 * [Output](#output)
 
 # About the tool
@@ -71,6 +70,7 @@ Now run the main perl script:
 
 The most interesting parameter that can be tweaked is the `	--log2-threshold`. The default is set to 0.6
 
+## Output
 
 This produces two files `sample-vs-reference.cnv` and `sample-vs-reference.count`
 

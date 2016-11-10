@@ -85,10 +85,6 @@ data <- read.delim("Hum1.hits-vs-Hum3.hits.log2-0.8.pvalue-0.001.minw-4.cnv")
 plot.cnv(data, ylim = c(-8,8))
 ```
 
-tL<-read.delim("HUM-1.hits.filt-vs-HUM-2.hits.filt.log2-0.6.pvalue-0.001.minw-4._2L.cnv")
-
-plot.cnv(tL, ylim = c(-8,8))
-
 ```{R}
 for (chrom in c("X","Y")){
 	plot.cnv.chr <- function (data, chromosome=chrom,
@@ -99,10 +95,4 @@ for (chrom in c("X","Y")){
 	ggsave(file = paste("HUM-1",chrom,".pdf",sep="_"))
 }
 ```
-
-plot.cnv.chr <- function (data, chromosome = X,
-                       from = NA, to = NA, title = X,
-                       ylim = c(-4, 4), glim = c(NA, NA),
-                       xlabel = "Position (bp)")		  
-plot.cnv.chr 
 						  

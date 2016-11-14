@@ -12,6 +12,7 @@
 CNV-Seq alows the detection of copy number variation using NGS data.
 
 # Input
+
 In order to reduce the noise around repeat regions in the genome, we first filter reads with a mapping quality > 4: 
 
 `samtools view -b -q 4 sample.bam > sample.qfilt.bam`

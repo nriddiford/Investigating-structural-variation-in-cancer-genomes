@@ -88,7 +88,7 @@ This produces two files `sample-vs-reference.cnv` and `sample-vs-reference.count
 | X | 183 | 545 | 82 | 123 |
 | X | 365 | 727 | 90 | 115 |
 
-`sample-vs-reference.cnv` contains the stats, e.g.: 
+`sample-vs-reference.cnv` contains the stats. 
 
 | chromosome | start | end | test | ref | position | log2 | p.value | cnv | cnv.size | cnv.log2 | cnv.p.value |
 |:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|

@@ -6,6 +6,8 @@
   * [Hits files](#hits-file)
 * [Run CNV-Seq](#cnv-seq)
 * [Output](#output)
+  * [Plotting](#plotting)
+* [To do...](#to-do...)
 
 # About the tool
 
@@ -67,20 +69,29 @@ open my $out, '>', "$f\.filt" or die $!;
 }
 ```
 
-## CNV-Seq
+# CNV-Seq
 Now run the main perl script: 
 
 `cnv-seq.pl --ref Hum3.hits --test Hum1.hits --genome-size 23542271`
 
 The most interesting parameter that can be tweaked is the `--log2-threshold`. The default is set to 0.6. (Not clear how changin this affects results though...)
 
-## Output
+# Output
 
 This produces two files `sample-vs-reference.cnv` and `sample-vs-reference.count`
 
 `sample-vs-reference.count` shows the raw count data for each CNV. 
 
-`sample-vs-reference.cnv` contains the stats 
+`sample-vs-reference.cnv` contains the stats, e.g.: 
+
+| chromosome | start | end | test | ref | position | log2 | p.value | cnv | cnv.size | cnv.log2 | cnv.p.value |
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| X | 1 | 363 | 70 | 124 | 182 | -0.479319752689881 | 0.0462467378993667 | 0 | NA | NA | NA |
+| X | 183 | 545 | 82 | 123 | 364 | -0.239368959969129 | 0.194296291525077 | 0 | NA | NA | NA |
+| X | 365 | 727 | 90 | 115 | 546 | -0.00804341386267303 | 0.488268352520283 | 0 | NA | NA | NA |
+
+
+## Plotting
 
 Initially, plot all data for all chromosomes:
 ```{R}
@@ -103,6 +114,12 @@ cnv.print(Hum1_Hum3)
 plot.cnv(Hum1_Hum3, CNV=43, upstream=1e+4, downstream=1e+4)
 ```
 
+
+# To do...
+
+Lots more plotting features to expore. The following needs tewaking. 
+Ideally, plot chromosomes in a grid, one per row on one page.
+
 ```{R}
 for (chrom in c("X","Y")){
 	plot.cnv.chr <- function (data, chromosome=chrom,
@@ -114,3 +131,7 @@ for (chrom in c("X","Y")){
 }
 ```
 						  
+Should also look into filtering output files to select regions above certain thresholds. E.g.:
+* CNVs with Log2 difference > abs(1)
+* CNVs above/below size threshold
+* CNVs supported by > x reads (av coverage depth?)

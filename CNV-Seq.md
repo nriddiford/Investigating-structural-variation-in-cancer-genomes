@@ -72,7 +72,7 @@ Now run the main perl script:
 
 `cnv-seq.pl --ref Hum3.hits --test Hum1.hits --genome-size 23542271`
 
-The most interesting parameter that can be tweaked is the `	--log2-threshold`. The default is set to 0.6
+The most interesting parameter that can be tweaked is the `--log2-threshold`. The default is set to 0.6. (Not clear how changin this affects results though...)
 
 ## Output
 
@@ -82,11 +82,23 @@ This produces two files `sample-vs-reference.cnv` and `sample-vs-reference.count
 
 `sample-vs-reference.cnv` contains the stats 
 
-To plot all data
+Initially, plot all data for all chromosomes:
 ```{R}
 library(cnv)
-data <- read.delim("Hum1.hits-vs-Hum3.hits.log2-0.8.pvalue-0.001.minw-4.cnv")
-plot.cnv(data, ylim = c(-8,8))
+Hum1_Hum3 <- read.delim("Hum1.hits-vs-Hum3.hits.log2-0.8.pvalue-0.001.minw-4.cnv")
+plot.cnv(Hum1_Hum3, ylim = c(-8,8))
+```
+
+Can also plot per chromosome: 
+
+```plot.cnv(Hum1_Hum3, ylim = c(-8,8), chromosome = "X")```
+
+Or check out CNVs identified, and plot an interesting region:
+
+```{R}
+cnv.print(Hum1_Hum3)
+# Select CNV #43, and plot surrounding region +/- 10kb
+plot.cnv(Hum1_Hum3, CNV=43, upstream=1e+4, downstream=1e+4)
 ```
 
 ```{R}

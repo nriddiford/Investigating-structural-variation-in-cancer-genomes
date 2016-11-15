@@ -82,7 +82,7 @@ Call these `sample.sv.conf` and `reference.sv.conf`.
 `sample.sv.conf` example:
  
 
-``` bash
+```{html}
 <general>
 input_format=bam 
 sv_type=all
@@ -303,7 +303,8 @@ The first few lines of my sorted bed file look like this:
 
 Another look at out `<bed><coverage>` block will give us info on the colours (comments added): 
 	
-```<bed>
+```{html}
+<bed>
 <colorcode>
 190,190,190 = 1,2 # grey
 0,0,0       = 3,3 # black
@@ -317,8 +318,7 @@ Another look at out `<bed><coverage>` block will give us info on the colours (co
 ```
 
 
-Some of these can be viewed as tracks in IGV for example. 
-
+Some of these can be viewed as tracks in IGV: 
 
 
 `bedtools sort -sizeA -i sample_compared.bed > sample_compared_sorted.bed`
@@ -328,8 +328,9 @@ Some of these can be viewed as tracks in IGV for example.
 
 ## Depth-of-coverage analysis
 
-Create a new `config` file the sample only: 
+Create a new config file for the sample only, called `sample.cnv.conf`: 
 
+```{html}
 <general>
 input_format=bam
 sv_type=all
@@ -349,11 +350,11 @@ window_size=30000^M
 step_length=10000
 mates_file_ref=/path/to/reference/original.bam
 </detection>
+```
 
 **Important** make sure that the `-- mates_file_ref` option in the `<coverage>` block links to the _original_ bam file of the _reference_ (before processing with `BAM_preprocessingPairs.pl`)
 
-
-`SVDetect cnv links2bed -conf sample.sv.conf`
+`SVDetect cnv links2bed -conf sample.cnv.conf`
 
 This produces a tabulated-text file listing coverage data of regions sized by the <window_size> parameter with the following fields:
 
@@ -362,4 +363,4 @@ This produces a tabulated-text file listing coverage data of regions sized by th
 3. Chromosome end coordinate
 4. Average depth-of-coverage from the sample mate-pair data
 5. Average depth-of-coverage from the reference mate-pair data
-6. Log-ratio of 4. and 5. values*
+6. Log-ratio of 4. and 5. values

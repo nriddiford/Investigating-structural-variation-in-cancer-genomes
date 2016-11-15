@@ -7,7 +7,7 @@
 * [Run CNV-Seq](#cnv-seq)
 * [Output](#output)
   * [Plotting](#plotting)
-* [To do...](#to-do...)
+* [To do](#to-do...)
 
 # About the tool
 

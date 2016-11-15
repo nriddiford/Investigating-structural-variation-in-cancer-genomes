@@ -200,12 +200,13 @@ These describe two interchromosomal translocations on chromosome 2L. The first i
 
 ## Filtering
 
-The filtering procedure of SVDetect takes as input all links previously identified and uses user-defined filtering parameter values to call PEM clusters. The minimum number of paired-ends is one of the most important filtering parameters to call a cluster. Use of such a threshold improves confidence in the detection of SVs.
+The filtering procedure of SVDetect takes as input all identified links and uses user-defined filtering parameters to call PEM clusters. The **minimum number of paired-ends** is one of the most important filtering parameters to call a cluster. Setting a higher threshold here improves confidence in the detection of SVs.
 
 Let's have a look at the filtering section of out `sample.sv.conf` file: 
 
 ```sed -n '/<filtering>/,/<\/filtering>/p' sample.sv.conf```
 
+```
 <filtering>
 split_link_file=0
 strand_filtering=1
@@ -220,6 +221,7 @@ final_score_threshold=0.8
 mu_length=183
 sigma_length=832
 </filtering>
+```
 
 The only change I've made to the default setting (other than mu and sigma) really is the `-- nb_pairs_threshold` option. Here, I specify that there must a minimum of 5 pairs in a cluster (more conservative). Therefore, the two SVs identified in the `sample.all.links` file are not present in the `sample.all.links.filtered` file.
 

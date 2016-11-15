@@ -7,7 +7,7 @@
 * [Run CNV-Seq](#cnv-seq)
 * [Output](#output)
   * [Plotting](#plotting)
-* [To do](#to-do...)
+* [To do](#to-do)
 
 # About the tool
 
@@ -121,7 +121,7 @@ plot.cnv(Hum1_Hum3, CNV=43, upstream=1e+4, downstream=1e+4)
 ```
 
 
-# To do...
+# To do
 
 Lots more plotting features to expore. The following needs tewaking. 
 Ideally, plot chromosomes in a grid, one per row on one page.

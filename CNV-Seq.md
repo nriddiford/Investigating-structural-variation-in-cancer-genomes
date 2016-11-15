@@ -91,7 +91,9 @@ plot.cnv(Hum1_Hum3, ylim = c(-8,8))
 
 Can also plot per chromosome: 
 
-```plot.cnv(Hum1_Hum3, ylim = c(-8,8), chromosome = "X")```
+```{R}
+plot.cnv(Hum1_Hum3, ylim = c(-8,8), chromosome = "X")
+```
 
 Or check out CNVs identified, and plot an interesting region:
 

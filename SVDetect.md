@@ -206,7 +206,7 @@ Let's have a look at the filtering section of out `sample.sv.conf` file:
 
 ```sed -n '/<filtering>/,/<\/filtering>/p' sample.sv.conf```
 
-```
+```{html}
 <filtering>
 split_link_file=0
 strand_filtering=1

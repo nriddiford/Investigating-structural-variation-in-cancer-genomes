@@ -1,4 +1,4 @@
-# Protocol to detect single nucleotide variation using Varscan2
+# Tutorial to detect single nucleotide variation using Varscan2
 
 # Table of Contents
 * [About the tool](#about-the-tool)

@@ -1,4 +1,4 @@
-# Calling SNPs with VCFtools
+# Tutorial for calling SNPs with VCFtools
 
 # Table of Contents
 * [About the tool](#about-the-tool)

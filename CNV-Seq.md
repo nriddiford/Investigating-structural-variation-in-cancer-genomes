@@ -1,4 +1,4 @@
-# Protocol to detect copy number variation using CNV-Seq
+# Tutorial to detect copy number variation using CNV-Seq
 
 # Table of Contents
 * [About the tool](#about-the-tool)

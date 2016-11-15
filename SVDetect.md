@@ -1,4 +1,4 @@
-# Protocol to detect structual variants with SVDetect
+# Tutorial to detect structual variants with SVDetect
 
 # Table of Contents
 * [About the tool](#about-the-tool)

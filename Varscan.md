@@ -68,6 +68,12 @@ This gives two files, one called `S1vsC.snp` and one `S1vsC.indel` with the foll
 13.	**Somatic_Status**	status of variant (Germline, Somatic, or LOH)	
 14.	**Pvalue**		Significance of variant read count vs. expected baseline error
 15.	**Somatic_Pvalue**	Significance of tumor read count vs. normal read count
+16.	**tumor_reads1_plus**       Ref-supporting reads from + strand in tumor
+17.	**tumor_reads1_minus**     Ref-supporting reads from - strand in tumor
+18.	**tumor_reads2_plus**       Var-supporting reads from + strand in tumor
+19.	**tumor_reads2_minus**		Var-supporting reads from - strand in tumor
+
+`S1vsC.snp`:
 
 | chrom | position | ref | var | normal_reads1 | normal_reads2 | normal_var_freq | normal_gt | tumor_reads1 | tumor_reads2 | tumor_var_freq | tumor_gt | somatic_status | variant_p_value | somatic_p_value | tumor_reads1_plus | tumor_reads1_minus | tumor_reads2_plus | tumor_reads2_minus | normal_reads1_plus | normal_reads1_minus | normal_reads2_plus | normal_reads2_minus |
 |:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
@@ -75,7 +81,7 @@ This gives two files, one called `S1vsC.snp` and one `S1vsC.indel` with the foll
 | 2L | 5403 | C | G | 27 | 13 | 32.5% | S | 15 | 11 | 42.31% | S | Germline | 4.589401497448938E-9 | 0.29105012328732616 | 14 | 1 | 9 | 2 | 13 | 14 | 8 | 5 |
 | 2L | 5465 | C | A | 26 | 15 | 36.59% | M | 18 | 9 | 33.33% | M | Germline | 5.034423021681378E-9 | 0.7016421521628455 | 12 | 6 | 9 | 0 | 13 | 13 | 12 | 3 |
 
-And one called `S1vsC.indel`:
+`S1vsC.indel`:
 
 | chrom | position | ref | var | normal_reads1 | normal_reads2 | normal_var_freq | normal_gt | tumor_reads1 | tumor_reads2 | tumor_var_freq | tumor_gt | somatic_status | variant_p_value | somatic_p_value | tumor_reads1_plus | tumor_reads1_minus | tumor_reads2_plus | tumor_reads2_minus | normal_reads1_plus | normal_reads1_minus | normal_reads2_plus | normal_reads2_minus |
 |:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|

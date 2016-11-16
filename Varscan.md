@@ -13,7 +13,22 @@
 
 Varscan takes output from `samtools mplieup`. Easiest to pipe these together: 
 
-`samtools mpileup -f genome.fa sample.bam | java -jar VarScan.jar pileup2snp`
+`samtools mpileup -f genome.fa sample1.bam -o sample1.mpileup`
+
+This produces a pileup file with per-base information on SNPs:
+
+| chromosome | coordinate | Ref | read_cov | read_bases | base_qualities |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| 2L | 228 | T | 4 | .... | BB36 |
+| 2L | 229 | G | 4 | .... | BBFF |
+| 2L | 230 | A | 5 | ....^!, | BBFFE |
+| 2L | 231 | T | 5 | ...., | FFFFF |
+
+Line 1 shows that position 228 on Chr2L is covered by 4 reads, all matching (`.`) the ref nucleotide `T` 
+
+
+`mpileup2snp sample1.mpileup --min-coverage 25 --min-reads2 4 --min-var-freq 0.1 --p-value 0.05 --output-vcf 1 > sample1.vcf
+
 
 # Output
 

@@ -4,7 +4,9 @@
 * [About the tool](#about-the-tool)
 * [Input](#input)
   * [mpileup](#mpileup)
-* [mpileup2snp](#mpileup2snp)
+* [Run Varscan](#run-varscan)
+  * [mpileup2snp](#mpileup2snp)
+  * [somatic](#somatic)
 * [To do](#to-do)
 
 # About the tool
@@ -29,10 +31,11 @@ This produces a pileup file with per-base information in sample1:
 
 Row 1 for example shows that the 1-based coordinate 228 on Chr2L is covered by 4 reads, all matching (`.`) the ref nucleotide `T` 
 
+# Run Varscan
 
-# mpileup2snp
+## mpileup2snp
 
-First, run mpileup2snp to identify SNPs in a particular sample (vs reference genome):
+Run mpileup2snp to identify SNPs in a particular sample (vs reference genome):
 
 `mpileup2snp sample1.mpileup --min-coverage 25 --min-reads2 4 --min-var-freq 0.1 --p-value 0.05 --output-vcf 1 > sample1.vcf`
 
@@ -42,15 +45,17 @@ These are quite consservative settings, for a position to be called as an SNP in
 * Must have an an allele frequency of ≥0.1
 * P-value ≤0.05
 
+## somatic
 
+Running varscan with somatic option  
 
 Runnig 
 
-| Chrom | Position | Ref | Cons | Reads1 | Reads2 | VarFreq | Strands1 | Strands2 | Qual1 | Qual2 | Pvalue | MapQual1 | MapQual2 | Reads1Plus | Reads1Minus | Reads2Plus | Reads2Minus | VarAllele |
-|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| 2L | 5355 | C | Y | 21 | 2 | 8.7% | 2 | 1 | 46 | 69 | 0.98 | 1 | 1 | 14 | 7 | 2 | 0 | T |
-| 2L | 5372 | T | W | 6 | 9 | 60% | 2 | 2 | 60 | 44 | 0.98 | 1 | 1 | 5 | 1 | 8 | 1 | A |
-| 2L | 5390 | T | W | 13 | 11 | 45.83% | 2 | 2 | 47 | 40 | 0.98 | 1 | 1 | 12 | 1 | 10 | 1 | A |
+| chrom | position | ref | var | normal_reads1 | normal_reads2 | normal_var_freq | normal_gt | tumor_reads1 | tumor_reads2 | tumor_var_freq | tumor_gt | somatic_status | variant_p_value | somatic_p_value | tumor_reads1_plus | tumor_reads1_minus | tumor_reads2_plus | tumor_reads2_minus | normal_reads1_plus | normal_reads1_minus | normal_reads2_plus | normal_reads2_minus |
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| 2L | 5390 | T | A | 26 | 16 | 38.1% | W | 13 | 11 | 45.83% | W | Germline | 2.580689727008415E-10 | 0.36014277004737094 | 12 | 1 | 10 | 1 | 14 | 12 | 9 | 7 |
+| 2L | 5403 | C | G | 27 | 13 | 32.5% | S | 15 | 11 | 42.31% | S | Germline | 4.589401497448938E-9 | 0.29105012328732616 | 14 | 1 | 9 | 2 | 13 | 14 | 8 | 5 |
+| 2L | 5465 | C | A | 26 | 15 | 36.59% | M | 18 | 9 | 33.33% | M | Germline | 5.034423021681378E-9 | 0.7016421521628455 | 12 | 6 | 9 | 0 | 13 | 13 | 12 | 3 |
 
 # To do
 

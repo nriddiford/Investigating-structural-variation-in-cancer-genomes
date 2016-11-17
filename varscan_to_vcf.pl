@@ -1,7 +1,6 @@
 #!/usr/bin/perl
 use warnings;
 use strict;
-use feature qw / say /;
 
 my $file = $ARGV[0];
 
@@ -15,13 +14,14 @@ open my $loh, '>', $name . "_LOH." . $extention;
 
 while(<$in>){
     chomp;
+	
 	if ($_ =~ /^\#/){
 		 print $somatic "$_\n";
 		 print $germline "$_\n";
 		 print $loh "$_\n";
 	}
+	
 	else {
-		
 		my ($info) = (split)[7];
 		# my ($ss) = (split(/;/, $info))[1];
  		my ($ss) = $info =~ /SS=(\d+)/;

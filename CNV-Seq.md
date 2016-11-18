@@ -178,6 +178,5 @@ for (chrom in c("X","Y")){
 ```
 						  
 Should also look into filtering output files to select regions above certain thresholds. E.g.:
-* CNVs with Log2 difference > abs(1)
 * CNVs above/below size threshold
 * CNVs supported by > x reads (av coverage depth?)

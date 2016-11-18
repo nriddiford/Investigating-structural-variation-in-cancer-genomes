@@ -6,7 +6,7 @@
   * [Hits files](#hits-file)
 * [Run CNV-Seq](#cnv-seq)
 * [Output](#output)
-  * [Selecting for high/low coverage regions](#selecting-for-high/low-coverage-regions)
+  * [Selecting for high/low coverage regions](#selecting-for-high-and-low-coverage-regions)
   * [Plotting](#plotting)
 * [To do](#to-do)
 
@@ -132,7 +132,7 @@ This produces two files `sample-vs-reference.cnv` and `sample-vs-reference.count
 | X | 365 | 727 | 90 | 115 | 546 | -0.00804341386267303 | 0.488268352520283 | 0 | NA | NA | NA |
 
 
-## Selecting for high/low coverage regions
+## Selecting for high and low coverage regions
 
 In order to filter out CNVs of interest run `top_change.pl`, which will output IGV compatible annotation tracks (`_topchange_up3.gff3` and `_topchange_down3.gff3`) of CNVs above and below a user specified log2 threhold e.g. abs(log2) > `3` (linear FC 8).
 These can then be used for plotting or visualising in IGV.

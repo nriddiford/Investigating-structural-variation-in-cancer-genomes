@@ -1,6 +1,6 @@
 # Tools for discovering structural variants in WGS data
 
-# Jump to protocols:
+# Protocols:
 * **SVP callers**
   * [VCFTools](VCFtools.md)
   * [Varscan](Varscan.md)

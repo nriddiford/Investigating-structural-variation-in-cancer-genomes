@@ -1,5 +1,6 @@
 # Tools for discovering structural variants in WGS data
 
+# Jump to protocols:
 * **SVP callers**
   * [VCFTools](VCFtools.md)
   * [Varscan](Varscan.md)
@@ -8,10 +9,15 @@
 * **CNV callers**
   * [CNV-Seq](CNV-Seq.md)
 
-# Background
-Most of the following heavilly borrows from (Tattini et al (2015))[https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4479793/]
+# Table of contents
+* [Background](#background)
+* [Overview of detection strategies](#overview-of-detection-strategies)
 
-Structural variants (SVs) are genomic rearrangements generally affecting more then 50 bp. SVs include:
+
+# Background
+Most of the following heavily borrows from (Tattini et al (2015))[https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4479793/]
+
+Structural variants (SVs) are genomic rearrangements generally affecting more then 50 bp. These can include balanced (where a portion of the genome is moved with no net change in bps) and unbalanced (resulting in an increase/decrease in bps) events  SVs include:
 * Deletions
 * Insertions
 * Inversions
@@ -20,5 +26,4 @@ Structural variants (SVs) are genomic rearrangements generally affecting more th
 * Tandem repeats
 * Copy number variants (CNVs)
 
-Several databases – e.g., the Database of Genomic Variants archive which reports structural variation identified in healthy control samples (DGVa1) – have been created for the collection of SVs data (Lappalainen et al., 2013). Public data resources have been developed with the purpose of supporting the interpretation of clinically relevant variants, e.g., dbVar2, or collecting known disease genes (OMIM3) hit by SVs.
-
+# Overview of detection strategies

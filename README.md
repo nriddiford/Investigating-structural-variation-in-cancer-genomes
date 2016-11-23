@@ -15,7 +15,7 @@
 
 
 # Background
-Most of the following heavily borrows from (Tattini et al (2015))[https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4479793/]
+Most of the following heavily borrows from [Tattini et al (2015)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4479793/)
 
 Structural variants (SVs) are genomic rearrangements generally affecting more then 50 bp. These can include balanced (where a portion of the genome is moved with no net change in bps) and unbalanced (resulting in an increase/decrease in bps) events  SVs include:
 * Deletions

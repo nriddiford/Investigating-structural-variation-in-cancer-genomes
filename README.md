@@ -27,3 +27,11 @@ Structural variants (SVs) are genomic rearrangements generally affecting more th
 * Copy number variants (CNVs)
 
 # Overview of detection strategies
+
+So far, the NGS-based CNV detection methods can be categorized into five different strategies, including:
+* Paired-end mapping (PEM)
+* Split read (SR)
+* Read depth (RD)
+* De novo assembly of a genome (AS)
+* Combination of the above approaches (CB)
+

@@ -12,6 +12,10 @@
 # Table of contents
 * [Background](#background)
 * [Overview of detection strategies](#overview-of-detection-strategies)
+  * [Paired-end](#paired-end)
+  * [Split-read](#split-read)
+  * [Read-depth](#read-depth)
+  * [Assembly](#assembly)
 
 
 # Background
@@ -27,7 +31,6 @@ Structural variants (SVs) are genomic rearrangements generally affecting more th
 * Copy number variants (CNVs)
 
 # Overview of detection strategies
-
 So far, the NGS-based CNV detection methods can be categorized into five different strategies, including:
 * Paired-end mapping (PEM)
 * Split read (SR)
@@ -35,3 +38,17 @@ So far, the NGS-based CNV detection methods can be categorized into five differe
 * De novo assembly of a genome (AS)
 * Combination of the above approaches (CB)
 
+## Paired-end
+Paired-end mapping (PEM) strategy detects SVs/CNVs through discordantly mapped reads. A discordant mapping is produced if the distance between two ends of a read pair is significantly different from the average insert size.
+
+## Split read
+Split read (SR)-based methods use incompletely mapped read from each read pair to identify small SVs/CNVs.
+
+## Read depth
+Read depth (RD) approach detects CNVs by counting the number of reads mapped to each genomic region. In the figure, reads are mapped to three exome regions.
+
+## Assembly
+Assembly (AS)-based approach detects CNVs by mapping contigs to the reference genome.
+
+## Combined
+Combinatorial approach combines RD and PEM information to detect CNVs.

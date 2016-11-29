@@ -12,7 +12,7 @@
 
 # About the tool
 
-CNV-Seq alows the detection of copy number variation using NGS data.
+CNV-Seq allows the detection of copy number variation using NGS data.
 
 # Input
 

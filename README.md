@@ -67,4 +67,4 @@ Assembly (AS)-based approach detects CNVs by mapping contigs to the reference ge
 Combinatorial approach combines RD and PEM information to detect CNVs.
 
 
-[1].	Zhao M, Wang Q, Wang Q, Jia P, Zhao Z. Computational tools for copy number variation (CNV) detection using next-generation sequencing data: features and perspectives. BMC Bioinformatics. 2013
+[1]:	Zhao M, Wang Q, Wang Q, Jia P, Zhao Z. Computational tools for copy number variation (CNV) detection using next-generation sequencing data: features and perspectives. BMC Bioinformatics. 2013

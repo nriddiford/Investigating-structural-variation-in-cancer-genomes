@@ -1,5 +1,7 @@
 # Tools for discovering structural variants in WGS data
 
+This repository contains protocols that I am developing for various tools I am using to identify structural variants in WGS data.
+
 # Protocols:
 * **SVP callers**
   * [VCFTools](VCFtools.md)
@@ -11,6 +13,8 @@
 
 # Table of contents
 * [Background](#background)
+* [Types of structural variation](#types-of-structural-variation)
+  * [Copy number variation](#copy-number-variation)
 * [Overview of detection strategies](#overview-of-detection-strategies)
   * [Paired-end](#paired-end)
   * [Split-read](#split-read)
@@ -29,6 +33,15 @@ Structural variants (SVs) are genomic rearrangements generally affecting more th
 * Translocations
 * Tandem repeats
 * Copy number variants (CNVs)
+
+# Types of structural variation
+
+## Copy number variation 
+
+See Zhao et al 2015 [^1]
+CNV refers to a type of intermediate-scale SVs with copy number changes involving a DNA fragment that is typically greater than one kilobases (Kb) and less than five mega- bases (Mb). In humans it is estimated that ~ 12% of the genome is subject to copy number change 
+
+
 
 # Overview of detection strategies
 So far, the NGS-based CNV detection methods can be categorized into five different strategies, including:
@@ -52,3 +65,6 @@ Assembly (AS)-based approach detects CNVs by mapping contigs to the reference ge
 
 ## Combined
 Combinatorial approach combines RD and PEM information to detect CNVs.
+
+
+[^1].	Zhao M, Wang Q, Wang Q, Jia P, Zhao Z. Computational tools for copy number variation (CNV) detection using next-generation sequencing data: features and perspectives. BMC Bioinformatics. 2013

@@ -8,6 +8,7 @@ This repository contains protocols that I am developing for various tools I am u
   * [Varscan](Varscan.md)
 * **SV callers**
   * [SVDetect](SVDetect.md)
+  * [LUMPY](LUMPY.md)
 * **CNV callers**
   * [CNV-Seq](CNV-Seq.md)
 
@@ -20,6 +21,8 @@ This repository contains protocols that I am developing for various tools I am u
   * [Split-read](#split-read)
   * [Read-depth](#read-depth)
   * [Assembly](#assembly)
+* [Identification of structural variation](#identification-of-structural-variation)
+  * [CNVs](#cnvs)
 
 
 # Background
@@ -39,10 +42,7 @@ Structural variants (SVs) are genomic rearrangements generally affecting more th
 ## Copy number variation 
 
 See Zhao et al 2015(1)
-CNV refers to a type of intermediate-scale SVs with copy number changes involving a DNA fragment that is typically greater than one kilobase (Kb) and less that:x
-
-an five megabases (Mb). In humans it is estimated that ~ 12% of the genome is subject to copy number change. Generally, CNVs include deletions, insertions, and duplications of genomic regions. 
-
+CNV refers to a type of intermediate-scale SVs with copy number changes involving a DNA fragment that is typically greater than 1Kb and less than 5Mb. In humans it is estimated that ~ 12% of the genome is subject to copy number change. Generally, CNVs include deletions, insertions, and duplications of genomic regions. 
 
 
 # Overview of detection strategies
@@ -67,6 +67,11 @@ Assembly (AS)-based approach detects CNVs by mapping contigs to the reference ge
 
 ## Combined
 Combinatorial approach combines RD and PEM information to detect CNVs.
+
+# Identification of structural variation
+
+## CNVs 
+
 
 
 1.	Zhao M, Wang Q, Wang Q, Jia P, Zhao Z. Computational tools for copy number variation (CNV) detection using next-generation sequencing data: features and perspectives. BMC Bioinformatics. 2013

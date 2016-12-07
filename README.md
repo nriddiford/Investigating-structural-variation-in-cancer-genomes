@@ -25,7 +25,7 @@ This repository contains protocols that I am developing for various tools I am u
 # Background
 Most of the following heavily borrows from [Tattini et al (2015)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4479793/)
 
-Structural variants (SVs) are genomic rearrangements generally affecting more then 50 bp. These can include balanced (where a portion of the genome is moved with no net change in bps) and unbalanced (resulting in an increase/decrease in bps) events  SVs include:
+Structural variants (SVs) are genomic rearrangements generally affecting more then 50 bp. These can include balanced (where a portion of the genome is moved with no net change in bps) and unbalanced (resulting in an increase/decrease in bps) events and include:
 * Deletions
 * Insertions
 * Inversions
@@ -39,7 +39,9 @@ Structural variants (SVs) are genomic rearrangements generally affecting more th
 ## Copy number variation 
 
 See Zhao et al 2015(1)
-CNV refers to a type of intermediate-scale SVs with copy number changes involving a DNA fragment that is typically greater than one kilobases (Kb) and less than five megabases (Mb). In humans it is estimated that ~ 12% of the genome is subject to copy number change. Generally, CNVs include deletions, insertions, and duplications of genomic regions. 
+CNV refers to a type of intermediate-scale SVs with copy number changes involving a DNA fragment that is typically greater than one kilobase (Kb) and less that:x
+
+an five megabases (Mb). In humans it is estimated that ~ 12% of the genome is subject to copy number change. Generally, CNVs include deletions, insertions, and duplications of genomic regions. 
 
 
 

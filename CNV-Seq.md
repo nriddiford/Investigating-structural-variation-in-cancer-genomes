@@ -134,7 +134,7 @@ This produces two files `sample-vs-reference.cnv` and `sample-vs-reference.count
 
 ## Selecting for high and low coverage regions
 
-In order to filter out CNVs of interest run `top_change.pl`, which will output IGV compatible annotation tracks (`_topchange_up3.gff3` and `_topchange_down3.gff3`) of CNVs above and below a user specified log2 threhold e.g. abs(log2) > `3` (linear FC 8).
+In order to filter out CNVs of interest run `top_change.pl`, which will output IGV compatible annotation tracks (`_topchange_up.gff3` and `_topchange_down.gff3`) of CNVs above and below a user specified log2 threhold e.g. abs(log2) > `1` (linear FC 2).
 These can then be used for plotting or visualising in IGV.
 
 ## Plotting
@@ -163,7 +163,7 @@ plot.cnv(Hum1_Hum3, CNV=43, upstream=1e+4, downstream=1e+4)
 
 # To do
 
-Lots more plotting features to expore. The following needs tewaking. 
+Lots more plotting features to expore. The following needs tweaking. 
 Ideally, plot chromosomes in a grid, one per row on one page.
 
 ```{R}

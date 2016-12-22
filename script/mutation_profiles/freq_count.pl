@@ -9,6 +9,8 @@ my $index_file = $ARGV[1];
 
 exit usage() unless $#ARGV == 1;
 
+say "Running new version";
+
 say "Reading in VCF file: $vcf_file";
 open my $VCF_in, '<', $vcf_file or die $!;
 
@@ -117,11 +119,12 @@ for my $chromosome ( sort keys %snps ){
 }
 say "...done";
 
+say "writing trinucleotides to $out...";
 for my $ch (sort keys %tri){
 	for my $seq (sort keys %{$tri{$ch}}) {
 		my $count = $tri{$ch}{$seq};
 		my $percentage = eval sprintf('%.1f', $count/$snp_count{$ch} * 100);
-		print $out "$ch $seq $count $percentage\n";
+		print $out "$ch $seq $percentage\n";
 	}
 }
 
@@ -130,34 +133,3 @@ say "...done";
 sub usage {
 	say "Usage: perl $0 <snps.vcf> <genome.index";
 }
-
-
-
-# print "\nFound $all_snps_count snps across whole genome\n\n";
-#
-# for my $chromosome ( sort keys %snps ){
-# 	say "Found $snp_count{$chromosome} snps on $chromosome (which is $chroms{$chromosome} bases)";
-# 	my ($freq) = $snp_count{$chromosome}/$chroms{$chromosome};
-# 	say "Mutation rate on chromosome:    $freq";
-#         for my $reference_nuc ( sort keys %{$snps{$chromosome}} ){
-#  			for my $alt_nuc ( sort keys %{$snps{$chromosome}{$reference_nuc}} ){
-#
-# 			my $count = $snps{$chromosome}{$reference_nuc}{$alt_nuc};
-#
-# 			my $percentage = eval sprintf('%.1f', $count/$snp_count{$chromosome} * 100);
-# 			print "  $reference_nuc=>$alt_nuc\t$percentage\n";
-#
-#
-# 			# print $out "$chromosome\t$reference_nuc>$alt_nuc\t$percentage\n";
-#
-# 		}
-# 	}
-# 	print "\n";
-# }
-#
-# sub usage {
-# 	say "Usage: perl $0 <snps.vcf> <genome.index";
-# }
-
-
-

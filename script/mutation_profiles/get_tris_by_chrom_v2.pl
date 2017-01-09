@@ -220,12 +220,12 @@ say "...done";
 
 sub usage {
     say "********** compare_snps ***********";
-    say "Usage: $0 [options]";
+    say "Usage: perl $0 [options]";
 	say "--genome = genome fasta file";
 	say "--all-snps = specify name of output file for all snps";
 	say "--chrom-snps = specify name of output file for snps per chromosome";
-	say "--help";
+	say "--help = prints this help message";
 	say "--quiet";
-	say "--debug";
+	say "--debug = runs in verbose mose for debugging";
 	say "Nick Riddiford 2016";
 }

@@ -9,7 +9,7 @@
 
 ## Protocol
 
-VCFtools (and the binary version BCFtools) accept .vcf fils that can be generated through [samtools mpileup][http://www.htslib.org/doc/samtools.html] (for example).
+VCFtools (and the binary version BCFtools) accept .vcf fils that can be generated through samtools mpileup[http://www.htslib.org/doc/samtools.html] (for example).
 
 .bam files must be in the same directory as their index file:
 

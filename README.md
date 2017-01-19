@@ -4,13 +4,16 @@ This repository contains protocols that I am developing for various tools I am u
 
 # Protocols:
 * **SVP callers**
-  * [VCFTools](VCFtools.md)
-  * [Varscan](Varscan.md)
+  * [VCFTools](VCFtools/VCFtools.md)
+  * [Varscan](Varscan/Varscan.md)
+  * [Freebayes](Freebayes/Freebayes.md)
 * **SV callers**
-  * [SVDetect](SVDetect.md)
-  * [LUMPY](LUMPY.md)
+  * [SVDetect](SVDetect/SVDetect.md)
+  * [LUMPY](LUMPY/LUMPY.md)
+  * [Delly](Delly/Delly.md)
 * **CNV callers**
-  * [CNV-Seq](CNV-Seq.md)
+  * [CNV-Seq](CNV-Seq/CNV-Seq.md)
+  * [Control-FREEC](Control-FREEC/Control-FREEC.md)
 
 # Table of contents
 * [Background](#background)

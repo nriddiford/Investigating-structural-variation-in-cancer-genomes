@@ -44,9 +44,11 @@ svtools genotype \
 
 Run as `perl lumpy_filt.pl -h` to see usage statement
 
+```{perl}
 ********** lumpy_filter ***********
 Usage: lumpy_filt.pl [options]
   --vcf = lumpy output (see README.txt for instructions on generating this)
   --output_dir = specify name of output directory to write to
   --help
 Nick Riddiford 2017
+```

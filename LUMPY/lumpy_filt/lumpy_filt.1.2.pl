@@ -96,7 +96,7 @@ while(<$in>){
 		 $normal_reads	==	0
 	   ) {
 			
-	 	print $filtered join("\t", @fields[0..5], "PASS=$quality_score", @fields[7..10]) . "\n";
+	 	print $filtered join("\t", @fields[0..5], "PASS", @fields[7..10]) . "\n";
 		$sv_count++;
 	}
 	

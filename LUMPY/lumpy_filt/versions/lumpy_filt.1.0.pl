@@ -13,7 +13,6 @@ my $vcf_file = 'test_files/tumour.normal.test.gt.vcf';
 my $output_dir = 'test_files/';
 my $help;
 
-# Should add score threshold option
 GetOptions( 'vcf=s'	        	=>		\$vcf_file, 
             'output_dir=s'      =>      \$output_dir,
             'help'              =>      \$help

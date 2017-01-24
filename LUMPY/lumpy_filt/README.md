@@ -46,9 +46,11 @@ Run as `perl lumpy_filt.pl -h` to see usage statement
 
 ```
 ********** lumpy_filter ***********
-Usage: lumpy_filt.pl [options]
+Usage: lumpy_filt.1.2.pl [options]
   --vcf = lumpy output (see README.txt for instructions on generating this)
   --output_dir = specify name of output directory to write to
+  --test = run on test data
   --help
+
 Nick Riddiford 2017
 ```

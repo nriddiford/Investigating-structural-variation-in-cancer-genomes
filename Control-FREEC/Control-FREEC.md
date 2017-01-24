@@ -15,7 +15,7 @@ Control-Freec has a very good [manual](http://boevalab.com/FREEC/tutorial.html#C
 
 Each sample needs an individual config file (start by editing `config_WGS.txt`).
 
-For example see [example.config.txt](files/example.config.txt) for config for WGS mapped to Drosophila 6.12
+For example see my [example.config.txt](files/example.config.txt) for config for WGS mapped to Drosophila 6.12
 
 # Run Control-Freec
 

@@ -46,14 +46,13 @@ while(<$in>){
 
 
 sub usage {
-        say $0;
-        say "Program to read CNVs predicted by CNV-Seq function:";
-        say "'> cnv.print(data)'";
-        say "Expects data in the following format:";
-	say "cnv	chromosome	start	end	size	log2	p.value";
-        say "Outputs a .gff3 file compatible with IGV viewing";
-	say "Usage: $0 <_cnvs.txt>";
-        say "Nick Riddiford 2017";
+	say "\n***** $0 *****";
+    say "Program to read CNVs predicted by CNV-Seq using function '> cnv.print(data)'";
+    say "Expects data in the following format:";
+	say "cnv	chromosome	start	end	size	log2	p.value\n";
+    say "Outputs a .gff3 file compatible with IGV viewing";
+	say "Usage: $0 <_cnvs.txt>\n";
+    say "Nick Riddiford 2017\n";
 }
 
 

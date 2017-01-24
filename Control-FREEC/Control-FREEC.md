@@ -30,4 +30,4 @@ Files are written to directory specified in config file. See [manual](http://boe
 
 # Visualising CNVs in IGV
 
-To create an IGV compatible track for each sample, run [cf2gff.pl](script/cnv2gff.pl):
+To create an IGV compatible track for each sample, run [cf2gff.pl](script/cf2gff.pl):

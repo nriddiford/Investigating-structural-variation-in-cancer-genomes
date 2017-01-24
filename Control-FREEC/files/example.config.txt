@@ -1,0 +1,49 @@
+[general]
+##parameters chrLenFile and ploidy are required.
+chrFiles = /data/kdi_prod/project_result/948/01.00/Analysis/Genomes/Dmel_6/fasta_for_CF/chromosomes
+chrLenFile = /data/kdi_prod/project_result/948/01.00/Analysis/Genomes/Dmel_6/fasta_for_CF/dmel_6.12.len
+ploidy = 2
+
+##Parameter "breakPointThreshold" specifies the maximal slope of the slope of residual sum of squares.
+##This should be a positive value. The closer it is to Zero, the more breakpoints will be called. Its recommended value is between 0.01 and 0.08.
+
+breakPointThreshold = .8
+
+window = 50000
+step=10000
+
+##If you provide a path to chromosome files, Control-FREEC will look for the following fasta files in your directory (in this order):
+##1, 1.fa, 1.fasta, chr1.fa, chr1.fasta; 2, 2.fa, etc.
+##Please ensure that you don't have other files but sequences having the listed names in this directory.
+#chrFiles = path/hg19/
+
+minExpectedGC = 0.3
+maxExpectedGC = 0.45
+
+outputDir = /data/kdi_prod/project_result/948/01.00/Analysis/Analysis/Control-Freec/HUM/50000_window/
+contaminationAdjustment = TRUE
+
+minimalSubclonePresence = 20
+
+telocentromeric = 10000
+##If the parameter gemMappabilityFile is not specified, then the fraction of non-N nucleotides per window is used as Mappability.
+
+#gemMappabilityFile = /GEM_mappability/out76.gem
+
+sex=XY
+
+##set BedGraphOutput=TRUE if you want to create a BedGraph track for visualization in the UCSC genome browser:
+#BedGraphOutput=TRUE
+
+[sample]
+
+mateFile = /data/kdi_prod/project_result/948/01.00/Analysis/Bwa/HUM/HUM-1.TEx.q4.sort.nodups.RG.bam
+inputFormat = BAM
+mateOrientation = FR
+
+
+[control]
+
+mateFile = /data/kdi_prod/project_result/948/01.00/Analysis/Bwa/HUM/HUM-3.TEx.q4.sort.nodups.RG.bam
+inputFormat = BAM
+mateOrientation = FR

@@ -7,6 +7,7 @@
 * [Run CNV-Seq](#run-cnv-seq)
 * [Output](#output)
 * [Plotting](#plotting)
+* [Visualising CNVs in IGV](#visualising-cnvs-in-igv)
 
 # About the tool
 
@@ -70,11 +71,11 @@ This produces two files `sample-vs-reference.cnv` and `sample-vs-reference.count
 
 # Plotting
 
-To plot and output CNV info for samples, run [cnv_seq_process.sh](script/cnv_seq_process.sh) on `.cnv` files:
+To plot and output CNV info for all samples, run [cnv_seq_process.sh](script/cnv_seq_process.sh) on `.cnv` files:
 
 `$ bash cnv_seq_process.sh *.cnv`
 
-This uses a modified version of the main script provided with [CNV-Seq](https://github.com/hliang/cnv-seq/blob/master/cnv/R/cnv.R).
+This calls a modified version of the main script provided with [CNV-Seq](https://github.com/hliang/cnv-seq/blob/master/cnv/R/cnv.R).
 
 The main tweaks:
   * Change the plotting colours/densities
@@ -84,6 +85,15 @@ The main tweaks:
 This will by default produce two plots (one for [notch region](files/HUM-7_notch.pdf), and one for [chromosome X](files/HUM-7_X.pdf)) and a [cnvs.txt](HUM-4_cnvs.txt) file. 
 To plot for different chromosomes alter the `chrom` var in the script [cnv_seq_process.sh](script/cnv_seq_process.sh).
 
+# Visualasing CNVs in IGV
+
+To create an IGV compatible track for each sample, run [cnv2gff.pl](script/cnv2gff.pl):
+
+```{bash}
+for file in *_cnvs.txt; do
+	 perl cnv2gff.pl $file
+done
+```
 
 
 

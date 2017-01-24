@@ -40,7 +40,7 @@ This creates a two column, tab delimited file, with the second column giving the
 2L	4 
 ```
 
-Next, to select only fully assembled chromosomes run [filt.pl](scripts/filt.pl). This will output filtered files eg `sample.qfilt.hits.filt`:
+Next, to select only fully assembled chromosomes run [filt.pl](script/filt.pl). This will output filtered files eg `sample.qfilt.hits.filt`:
 
 
 # CNV-Seq
@@ -71,7 +71,7 @@ This produces two files `sample-vs-reference.cnv` and `sample-vs-reference.count
 
 ## Plotting
 
-To plot and output CNV info for samples, run [cnv_seq_process.sh](scripts/cnv_seq_process.sh)  from the same dir as the .cnv files:
+To plot and output CNV info for samples, run [cnv_seq_process.sh](script/cnv_seq_process.sh)  from the same dir as the .cnv files:
 
 `$ bash cnv_seq_process.sh *.cnv`
 

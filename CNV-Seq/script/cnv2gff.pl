@@ -52,7 +52,7 @@ sub usage {
         say "Expects data in the following format:";
 	say "cnv	chromosome	start	end	size	log2	p.value";
         say "Outputs a .gff3 file compatible with IGV viewing";
-	say "Usage: $0 <.cnv file>";
+	say "Usage: $0 <_cnvs.txt>";
         say "Nick Riddiford 2017";
 }
 

@@ -4,10 +4,9 @@
 * [About the tool](#about-the-tool)
 * [Input](#input)
   * [Hits files](#hits-file)
-* [Run CNV-Seq](#cnv-seq)
+* [Run CNV-Seq](#run-cnv-seq)
 * [Output](#output)
-  * [Selecting for high/low coverage regions](#selecting-for-high-and-low-coverage-regions)
-  * [Plotting](#plotting)
+* [Plotting](#plotting)
 
 # About the tool
 
@@ -43,7 +42,7 @@ This creates a two column, tab delimited file, with the second column giving the
 Next, to select only fully assembled chromosomes run [filt.pl](script/filt.pl). This will output filtered files eg `sample.qfilt.hits.filt`:
 
 
-# CNV-Seq
+# Run CNV-Seq
 Now run the main perl script: 
 
 `cnv-seq.pl --ref ref.qfilt.hits --test sample.qfilt.hits --genome-size 23542271 window-size 10000`
@@ -69,9 +68,22 @@ This produces two files `sample-vs-reference.cnv` and `sample-vs-reference.count
 | X | 365 | 727 | 90 | 115 | 546 | -0.00804341386267303 | 0.488268352520283 | 0 | NA | NA | NA |
 
 
-## Plotting
+# Plotting
 
-To plot and output CNV info for samples, run [cnv_seq_process.sh](script/cnv_seq_process.sh)  from the same dir as the .cnv files:
+To plot and output CNV info for samples, run [cnv_seq_process.sh](script/cnv_seq_process.sh) on `.cnv` files:
 
 `$ bash cnv_seq_process.sh *.cnv`
+
+This uses a modified version of the main script provided with [CNV-Seq](https://github.com/hliang/cnv-seq/blob/master/cnv/R/cnv.R).
+
+The main tweaks:
+  * Change the plotting colours/densities
+  * Show genes of interest in a closeup plot of notch region [e.g.](files/HUM-7_notch.pdf)
+  * Save CNV details for each file parsed for later processing
+
+This will by default produce two plots (one for [notch region](files/HUM-7_notch.pdf), and one for [chromosome X](files/HUM-7_X.pdf)) and a [cnvs.txt](HUM-4_cnvs.txt) file. 
+To plot for different chromosomes alter the `chrom` var in the script [cnv_seq_process.sh](script/cnv_seq_process.sh).
+
+
+
 

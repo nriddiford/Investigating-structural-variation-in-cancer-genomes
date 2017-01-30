@@ -82,7 +82,7 @@ The main tweaks:
   * Show genes of interest in a closeup plot of notch region [e.g.](files/HUM-7_notch.pdf)
   * Save CNV details for each file parsed for later processing
 
-This will by default produce two plots (one for [notch region](files/HUM-7_notch.pdf), and one for [chromosome X](files/HUM-7_X.pdf)) and a [cnvs.txt](HUM-4_cnvs.txt) file. 
+This will by default produce two plots (one for [notch region](files/HUM-7_notch.pdf), and one for [chromosome X](files/HUM-7_X.pdf)) and a [cnvs.txt](files/HUM-4_cnvs.txt) file. 
 To plot for different chromosomes alter the `chrom` var in the script [cnv_seq_process.sh](script/cnv_seq_process.sh).
 
 # Visualasing CNVs in IGV

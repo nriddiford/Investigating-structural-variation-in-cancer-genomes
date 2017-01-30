@@ -38,7 +38,7 @@ my ($name, $extention) = split(/\.([^.]+)$/, basename($vcf_file), 2);
 
 $output_dir =~ s!/*$!/!; # Add a trailing slash
 
-open my $filtered, '>', $output_dir . $name . ".lumpy.filtered.vcf" or die $!;
+open my $filtered, '>', $output_dir . $name . ".filtered.vcf" or die $!;
 
 my $sv_count = 0;
 my $pass = 0;

@@ -27,13 +27,14 @@ HWI-D00405:129:C6KNAANXX:4:2303:9571:89285	163	X	2988450	60	125M	=	2988587	262	C
 HWI-D00405:129:C6KNAANXX:4:2303:9571:89285	83	X	2988587	60	125M	=	2988450	-262	AACATGGGCAGGAATTCGCCAAAGACGGAAGCGCATATTCACCTTCATACCGTTGCATGTCCTCGGGTGCATGTGTTTGTGTGTGTGTATATATGCCTAGGTGTGCATGTGCTCGCATACCCACC	FFFFFFFFFFFFFB<FFFFFFFFFFFFF7<BFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFBBBBBB	DD:Z:R:NC_013209.1,POS:283611,CIGAR:39S36M50S,S:AS	PG:Z:MarkDuplicates	RG:Z:HUM-1	NM:i:0	DR:Z:NC_013209.1	AS:i:125	XS:i:0
 ```
 
-Run as `perl cigar_compare.pl -h` to see usage statement
+Run as `perl cigar_compare.pl -h` to see usage statement:
 
 ```
 ******** cigar_compare.pl ********
-Usage: cigar_comapre.pl [options]
-  --bam = specify bam file processed with 'tag_reads.py' [default 'files/test.bam']
+Usage: cigar_comapre.0.1.pl [options]
+  --bam = specify bam file processed with 'tag_reads.py'
   --debug = run in debug mode
+  --test  = run in test mode
   --help = print this help message and exit
 
 Nick Riddiford 2017

@@ -9,7 +9,7 @@ use Getopt::Long qw/ GetOptions /;
 
 my $debug;
 my $help;
-
+my $test;
 my $bam_file = $ARGV[0];
 
 GetOptions( 'bam=s'				=>			\$bam_file,

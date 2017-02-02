@@ -9,10 +9,12 @@ use Getopt::Long qw/ GetOptions /;
 
 my $debug;
 my $help;
-my $bam_file = 'files/test.bam';
 
-GetOptions( 'bam=s'				=>			\$bam_file, 
-			'debug'				=>			\$debug, 
+my $bam_file = $ARGV[0];
+
+GetOptions( 'bam=s'				=>			\$bam_file,
+			'debug'				=>			\$debug,
+			'test'				=>			\$test, 
 			'help'				=>			\$help
 	  	  )	or die usage();
 		  
@@ -54,8 +56,9 @@ while(<$in>){
 sub usage {
 	say "******** cigar_compare.pl ********";
     say "Usage: $0 [options]";
-	say "  --bam = specify bam file processed with 'tag_reads.py' [default 'files/test.bam']";
+	say "  --bam = specify bam file processed with 'tag_reads.py'";
 	say "  --debug = run in debug mode";
+	say "  --test  = run in test mode";
 	say "  --help = print this help message and exit\n";
 	say "Nick Riddiford 2017";
 }

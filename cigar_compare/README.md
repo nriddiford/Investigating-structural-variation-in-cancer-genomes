@@ -1,6 +1,8 @@
 # cigar_compare.pl
 
-This program comapres cigars from reads that are tagged as mapping to multiple genome.
+This program comapres cigars from reads that are tagged as mapping to multiple genomes.
+  * If the alternative alignment has a higher match value it will be treated as contamination and filtered out. 
+  * If the alternative alignment has a lower match value it will be kept.
 
 # Input
 

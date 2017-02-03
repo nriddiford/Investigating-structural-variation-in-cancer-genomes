@@ -1,0 +1,99 @@
+_______________________________
+HWI-D00405:129:C6KNAANXX:4:1301:15758:14178
+Droso:    30S20M75S 20 matched
+$VAR1 = [
+          20
+        ];
+Droso match total = 20
+_______________________________
+HWI-D00405:129:C6KNAANXX:4:1208:13229:45414
+Droso:    87S19M19S 19 matched
+$VAR1 = [
+          19
+        ];
+Droso match total = 19
+_______________________________
+HWI-D00405:129:C6KNAANXX:4:1301:16880:13271
+Droso:    99S19M7S 19 matched
+$VAR1 = [
+          19
+        ];
+Droso match total = 19
+_______________________________
+HWI-D00405:129:C6KNAANXX:4:1208:13229:45414
+Droso:    86S19M20S 19 matched
+$VAR1 = [
+          19
+        ];
+Droso match total = 19
+_______________________________
+HWI-D00405:129:C6KNAANXX:4:1301:16880:13271
+Droso:    8M1I116M 8, 116 matched
+$VAR1 = [
+          8,
+          116
+        ];
+Droso match total = 124
+Alt:    14S106M5S 106 matched
+$VAR1 = [
+          106
+        ];
+Alt match total = 106
+-> Keep: 124 > 106
+_______________________________
+HWI-D00405:129:C6KNAANXX:4:2310:17782:39172
+Droso:    76S21M28S 21 matched
+$VAR1 = [
+          21
+        ];
+Droso match total = 21
+_______________________________
+HWI-D00405:129:C6KNAANXX:4:2310:17782:39172
+Droso:    20S21M84S 21 matched
+$VAR1 = [
+          21
+        ];
+Droso match total = 21
+_______________________________
+HWI-D00405:129:C6KNAANXX:4:2315:1428:48303
+Droso:    78S19M28S 19 matched
+$VAR1 = [
+          19
+        ];
+Droso match total = 19
+_______________________________
+HWI-D00405:129:C6KNAANXX:4:2315:1428:48303
+Droso:    55S19M51S 19 matched
+$VAR1 = [
+          19
+        ];
+Droso match total = 19
+_______________________________
+HWI-D00405:129:C6KNAANXX:4:2316:1861:69366
+Droso:    29S21M75S 21 matched
+$VAR1 = [
+          21
+        ];
+Droso match total = 21
+_______________________________
+HWI-D00405:129:C6KNAANXX:4:2303:9571:89285
+Droso:    5M20S50M10S 5, 50 matched
+$VAR1 = [
+          5,
+          50
+        ];
+Droso match total = 55
+Alt:    39S36M50S 36 matched
+$VAR1 = [
+          36
+        ];
+Alt match total = 36
+-> Keep: 55 > 36
+_______________________________
+HWI-D00405:129:C6KNAANXX:4:2303:9571:89285
+Droso:    5M20S50M10S 5, 50 matched
+$VAR1 = [
+          5,
+          50
+        ];
+Droso match total = 55

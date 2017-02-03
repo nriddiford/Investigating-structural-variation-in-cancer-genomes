@@ -95,7 +95,7 @@ while(<$in>){
 		my $alt_mapping_flag = 0;
 				
 		for (split){
-			if (/^[CE]D/){
+			if (/^[CEG]D/){
 				($alt_cigar_group) = $_;
 				$alt_mapping_flag = 1;
 			}

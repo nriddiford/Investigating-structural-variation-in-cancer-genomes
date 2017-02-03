@@ -40,6 +40,6 @@ Nick Riddiford 2017
   * In normal mode (-b <bamfile>) a bed file will be produced showing the location of 'contamination' that has been filtered out, as well as the filtered bam file 
   * When combined with softclip mode (-b -s) reads will also be filtered as described in the usage statement
 
-  * Run in debug mode (-d) to output cigar strings and total match scores (and decision) to '.debug.log' for the first 10,000 reads, as well as a bed file ('mapped_not\_filtered.bed') showing the loactions of reads tagged as 'contamination' but kept in the alignment due to higher alignmnet scores to the primary genome
+  * Run in debug mode (-d) to output cigar strings and total match scores (and decision) to ['.debug.log'](files/test.debug.log) for the first 10,000 reads, as well as a bed file ('mapped_not\_filtered.bed') showing the loactions of reads tagged as 'contamination' but kept in the alignment due to higher alignmnet scores to the primary genome
   * If debug and softclipped mode are combined (-d -s) it will output a bed file showing location of reads filtered on soft-clipping for the first 10,000 reads
 

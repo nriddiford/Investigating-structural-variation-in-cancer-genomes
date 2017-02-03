@@ -43,13 +43,13 @@ my ($id) = (split/\./, $name)[0];
 
 open my $contamination_bed, '>', $id . ".contamination.bed" or die $!;
 
-my ($debug_print, $sc_filter_print);
+my ($debug_print, $sc_filter_print, $not_filtered_bed);
 if ($debug){
 	open $debug_print, '>', $id . ".debug.log" or die $!; 
 	open $sc_filter_print, '>', $id . ".softclip_filtered.bed" or die $!;
+	open $not_filtered_bed, '>', $id . ".mapped_not_filtered.bed" or die $!;
 }
 
-open my $not_filtered_bed, '>', $id . ".mapped_not_filtered.bed" or die $!;
 
 my $count = 0;
 
@@ -135,7 +135,7 @@ while(<$in>){
 		if ($soft_clip and $droso_cigar =~ /\d+S\d+M\d+S/){
 			
 			my ($sc_1, $m, $sc_2) = $droso_cigar =~ /(\d+)S(\d+)M(\d+)S/;
-			if ($sc_1 > 20 and $m < 30 and $sc_2 > 20){
+			if ($sc_1 > 15 and $m < 30 and $sc_2 > 15){
 				print $sc_filter_print "$chrom\t$start\t$bed_stop\n" if $debug;
 				next;
 			}

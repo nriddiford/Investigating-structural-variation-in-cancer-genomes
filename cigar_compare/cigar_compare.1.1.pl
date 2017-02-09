@@ -141,9 +141,7 @@ while(<$in>){
 				
 				print $te_bed "$chrom\t$start\t$bed_stop\n";
 			}
-		
-			# next unless $alt_mapping_flag;
-			
+					
 			# For the alt mappers, we want to check that they map better to the alt reference than to drosophila and decide on whether to discard or not
 			if ($alt_mapping_flag){
 				
@@ -171,7 +169,6 @@ while(<$in>){
 				my ($mate_cigar) = $mate_cigar_group =~ /CIGAR:(.*?\d+M.*?),/g;
 				my ($mate_match_score, @mate_match) = sum_matches($mate_cigar);
 				say unless $debug;
-				
 				debug($read, $mate_cigar, $mate_match_score, "mate", @mate_match) if $debug;
 			}
 		}
@@ -225,10 +222,8 @@ sub sum_matches {
 	my @matched;
 	push @matched, $cigar =~ /.*?(\d+)M/g;
 	
-	# print Dumper \@matched;
 	my $match_score;
 	$match_score += $_ foreach @matched;
-	
 	
 	return ($match_score, @matched);
 }

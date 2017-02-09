@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use strict;
-use warnings;
+# use warnings;
 
 use Data::Dumper;
 
@@ -62,18 +62,19 @@ while(<$in>){
 		next;
 	}
 	
+	my $droso_cigar;
 	my ($read) = (split)[0];
-	my ($droso_cigar) = (split)[5];
+	$droso_cigar = (split)[5];
 	
 	next unless $droso_cigar =~ /M/;
-	
+		
 	$count++;
 
 	# For bed output
 	my ($chrom, $start, $stop, $seq) = (split)[2,3,7,9];
 	my $read_length = length($seq);
 	my $bed_stop = $start + $read_length;
-	
+		
 	my ($droso_match_score, @droso_matched) = sum_matches($droso_cigar);
 	
 	debug($read, $droso_cigar, $droso_match_score, "Droso", @droso_matched) if $debug;
@@ -172,7 +173,6 @@ while(<$in>){
 				say unless $debug;
 				
 				debug($read, $mate_cigar, $mate_match_score, "mate", @mate_match) if $debug;
-				next;
 			}
 		}
 	
@@ -197,7 +197,7 @@ sub debug {
 	}
 	
 	print $debug_print "$type cigar: $cigar\n" . "Matches to $type: " . join(', ', @matched) . "\n";
-	print $debug_print "  " . (Dumper \@matched);
+	print $debug_print (Dumper \@matched);
 	print $debug_print "$type match total = $score\n";
 	print $debug_print "------------\n";
 	
@@ -214,20 +214,21 @@ sub debug {
 		print $debug_print "-> Throw read: [Contamination]\n";
 	} 
 	if ($type eq 'mate'){
-		print $debug_print "This read has been tagged becuase its mate maps to an alternaitve genome\n";	
+		print $debug_print "This read has been tagged because its mate maps to an alt genome\n";	
 		print $debug_print "-> Keep read\n";
 	}
 	
 }
 
-
 sub sum_matches {
 	my $cigar = shift;
 	my @matched;
 	push @matched, $cigar =~ /.*?(\d+)M/g;
-
+	
+	# print Dumper \@matched;
 	my $match_score;
 	$match_score += $_ foreach @matched;
+	
 	
 	return ($match_score, @matched);
 }

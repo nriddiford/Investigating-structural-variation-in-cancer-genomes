@@ -110,7 +110,7 @@ while(<$in>){
 			
 				# Primary tag group (Read = A, mate = B). In this instance, this is the 'non-filter' set
 				if (/^[A]D/){
-					$non_filter_alt_cigar_group = $_;
+					($non_filter_alt_cigar_group) = $_;
 					$non_filter_set = 1;
 				}
 			
@@ -143,7 +143,7 @@ while(<$in>){
 			}
 					
 			# For the alt mappers, we want to check that they map better to the alt reference than to drosophila and decide on whether to discard or not
-			if ($alt_mapping_flag){
+			elsif ($alt_mapping_flag){
 				
 				my ($alt_cigar) = $alt_cigar_group =~ /CIGAR:(.*?\d+M.*?),/g;
 				
@@ -157,7 +157,7 @@ while(<$in>){
 				}
 				
 				# If not, skip read and make bed showing contamination
-				elsif ($droso_match_score < $alt_match_score){
+				elsif ($droso_match_score <= $alt_match_score){
 					print $contamination_bed "$chrom\t$start\t$bed_stop\n";
 					debug($read, $alt_cigar, $alt_match_score, "true_alt", @alt_matched) if $debug;
 					next;
@@ -203,11 +203,11 @@ sub debug {
 		print $debug_print "-> Keep read\n";
 	}
 	if ($type eq 'false_alt'){
-		print $debug_print "This read has been tagged as mapping to a bacterial geneome\n";
+		print $debug_print "This read has been tagged as mapping to a bacterial genome\n";
 		print $debug_print "-> Keep read: [Maps better to Drosophila]\n"
 	}
 	if ($type eq 'true_alt'){
-		print $debug_print "This read has been tagged as mapping to a bacterial geneome\n";
+		print $debug_print "This read has been tagged as mapping to a bacterial genome\n";
 		print $debug_print "-> Throw read: [Contamination]\n";
 	} 
 	if ($type eq 'mate'){

@@ -26,6 +26,10 @@ GetOptions( 'vcf=s'	        	=>		\$vcf_file,
 
 if ($help)  { exit usage() } 
 
+if (not $vcf_file) {
+	 exit usage() unless $test;
+ } 
+
 if ($test) {
 	say "Running test mode...";
 	$vcf_file = 'test_files/tumour.normal.test.gt.vcf';
@@ -39,6 +43,8 @@ my ($name, $extention) = split(/\.([^.]+)$/, basename($vcf_file), 2);
 $output_dir =~ s!/*$!/!; # Add a trailing slash
 
 open my $filtered, '>', $output_dir . $name . ".filtered.vcf" or die $!;
+
+say "Writing output to " . "'$output_dir" . $name . ".filtered.vcf'" if $test;
 
 my $sv_count = 0;
 my $pass = 0;

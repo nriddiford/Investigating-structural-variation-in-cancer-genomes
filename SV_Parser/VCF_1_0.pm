@@ -42,7 +42,7 @@ sub parse {
 
 	my %sample_info;
 	my @samples;
-
+	
 	while(<$in>){
 		chomp;
 
@@ -80,7 +80,7 @@ sub parse {
 		my @format 		 	= split(/:/, $format_block);
 		
 		my @info_parts		= split(/;/, $info_block);
-
+		
 		foreach(@info_parts){
 			my ($info_key, $info_value);
 
@@ -100,9 +100,10 @@ sub parse {
 		
 		my $non_hom_control_flag = 0;
 		
-		my @filter_reasons;
 		
 		my ($t_GT, $c_GT);
+		
+		my @filter_reasons;
 		
 		for (my $i = 0; $i <= $#format; $i++ ){
 			if ( $format[$i] eq 'GT' ){
@@ -115,28 +116,32 @@ sub parse {
 				}
 			}
 		}
+		
+		
 							
 		my ($SV_length, $chr2, $t_SR, $t_PE);
 		if ($type eq 'lumpy'){
-			($SV_length, $chr2, $t_SR, $t_PE, @filter_reasons) = lumpy($info_block, $SV_type, $alt, $start, $stop, \@format, \@tumour_parts, \@normal_parts, \@filter_reasons);
+			( $SV_length, $chr2, $t_SR, $t_PE, @filter_reasons ) = lumpy($info_block, $SV_type, $alt, $start, $stop, \@format, \@tumour_parts, \@normal_parts, \@filter_reasons);
 		}
 		
 		elsif ($type eq 'delly'){
-			($SV_length, $chr2, $t_SR, $t_PE, @filter_reasons ) = delly($info_block, $start, $stop, $SV_type, \@filter_reasons);
+			( $SV_length, $chr2, $t_SR, $t_PE, @filter_reasons ) = delly($info_block, $start, $stop, $SV_type, \@filter_reasons);
 		}	
  	   	
-		chrom_filter($chr, $chr2, \@filter_reasons);
-		
-		$SVs{$id} = [ @fields[0..10], $SV_type, $SV_length, $stop, $chr2, $t_SR, $t_PE, @filter_reasons ];
+		# chrom_filter($chr, $chr2, \@filter_reasons);
+				
+		$SVs{$id} = [ @fields[0..10], $SV_type, $SV_length, $stop, $chr2, $t_SR, $t_PE, \@filter_reasons ];
 		
 		$info{$id} = [ [@format], [@format_long], [@info_long], [@tumour_parts], [@normal_parts], [%sample_info], [%info_block] ];
-				
+			
 	}	
 	return (\%SVs, \%info);
 }
 		
 sub lumpy {
-	my ($info_block, $SV_type, $alt, $start, $stop, $format, $tumour_parts, $normal_parts, $filter_reasons) = @_;
+	my ($info_block, $SV_type, $alt, $start, $stop, $format, $tumour_parts, $normal_parts, $filters) = @_;
+	
+	my @filter_reasons = @{ $filters };
 	
 	my ($SV_length) = $info_block =~ /SVLEN=(.*?);/;
 		
@@ -164,8 +169,8 @@ sub lumpy {
 				
 				# Flag if either control or tumour has depth < 10 at site
 				if ( $t_DP <= 10 or $c_DP <= 10 ){
-					push @{ $filter_reasons }, 'tumour_depth=' . $t_DP;
-					push @{ $filter_reasons }, 'control_depth=' . $c_DP;	
+					push @filter_reasons, 'tumour_depth=' . $t_DP;
+					push @filter_reasons, 'control_depth=' . $c_DP;	
 				}
 			}		
 		}
@@ -177,13 +182,13 @@ sub lumpy {
 		
 		# Filters:
 		if ($tumour_read_support <= 3) {
-			push @{ $filter_reasons }, 'tumour_reads=' . $tumour_read_support;
+			push @filter_reasons, 'tumour_reads=' . $tumour_read_support;
 		}
 			
 		# Filter if # tumour reads supporting var is less than 5 * control reads 
 		# Or if there are more than 2 control reads 
 		if ( ($control_read_support/$tumour_read_support) > 0.2 or $control_read_support > 2 ) {
-			push @{ $filter_reasons }, 'control_reads=' . $control_read_support;
+			push @filter_reasons, 'control_reads=' . $control_read_support;
 		}		
 			
 		my ($chr2) = 0;
@@ -194,23 +199,25 @@ sub lumpy {
 			$SV_length = $stop - $start;
 		}
 		
-	return ($SV_length, $chr2, $t_SR, $t_PE, $filter_reasons);
+	return ($SV_length, $chr2, $t_SR, $t_PE, @filter_reasons);
 }
 
 sub delly {
-	my ($info_block, $start, $stop, $SV_type, @filter_reasons) = @_;
+	my ($info_block, $start, $stop, $SV_type, $filters) = @_;
 	
+	my @filter_reasons = @{ $filters };
 	
+		
 	my ($SV_length) = ($stop - $start);
 	
 		my ($t_SR, $t_PE) = (0,0);
 		
 		if ($info_block =~ /;SR=(\d+);/){
-	   	$t_SR = $1;
+	   		$t_SR = $1;
 	   	}
 	   
 	   if ($info_block =~ /;PE=(\d+);/){
-	   	$t_PE = $1;
+	   		$t_PE = $1;
 	   }
  	  		
 		if ($start > $stop){
@@ -234,13 +241,16 @@ sub summarise_variants {
 	
 	my $read_support;
 	
+	my %filtered_sv;	
+	
 	for (keys %{ $SVs } ){
    	   
-       my ($chr, $start, $id, $ref, $alt, $quality_score, $filt, $info_block, $format_block, $tumour_info_block, $normal_info_block, $sv_type, $SV_length, $stop, $chr2, $SR, $PE, @filter_reasons) = @{ $SVs->{$_} };
+       my ($chr, $start, $id, $ref, $alt, $quality_score, $filt, $info_block, $format_block, $tumour_info_block, $normal_info_block, $sv_type, $SV_length, $stop, $chr2, $SR, $PE, $filters) = @{ $SVs->{$_} };
+	   
+	   my @filter_reasons = @{ $filters };
 	   
 		if (scalar @filter_reasons > 0){
 			$filtered++;
-			say foreach @filter_reasons;
 		}
 		
 	   $read_support = ($SR + $PE);
@@ -266,7 +276,6 @@ sub summarise_variants {
 	}
 
 	print "\n";
-	say "$filtered variants filtered";
 	say "Variants where both break points are on chromosomes 2/3/4/X/Y:";
 	say "$dels deletions";
 	say "$dups duplications";
@@ -285,7 +294,8 @@ sub get_variant {
 	if (not $info->{$id_lookup}){
 		say "Couldn't find any variant with ID: '$id_lookup' in file. Abort";
 		exit;
-	}	
+	}
+	
 	my (@format) 		= @{ $info->{$id_lookup}->[0]};
 	my (@format_long) 	= @{ $info->{$id_lookup}->[1]};
 	my (@info_long)		= @{ $info->{$id_lookup}->[2]};
@@ -295,7 +305,16 @@ sub get_variant {
 	my (%info_block)	= @{ $info->{$id_lookup}->[6]};
 	
 			
-	my ($chr, $start, $id, $ref, $alt, $quality_score, $filt, $info_block, $format_block, $tumour_info_block, $normal_info_block, $sv_type, $SV_length, $stop, $chr2, $SR, $PE, @filter_reasons) = @{ $SVs->{$id_lookup} };
+	my ($chr, $start, $id, $ref, $alt, $quality_score, $filt, $info_block, $format_block, $tumour_info_block, $normal_info_block, $sv_type, $SV_length, $stop, $chr2, $SR, $PE, $filters) = @{ $SVs->{$id_lookup} };
+    
+	my @filter_reasons = @{ $filters };
+	
+	if (scalar @filter_reasons > 0){
+	say "\n______________________________________________";	
+	say "Variant '$id' filtered for the following reasons:";
+	say "* $_" foreach @filter_reasons;
+	say "______________________________________________\n";
+	}
 	
 	say "ID:     $id";
 	say "TYPE:   $sv_type";
@@ -310,7 +329,6 @@ sub get_variant {
 	say "FILT:   $filt";
 	say "REF:    $ref";
 	say "ALT:    $alt";
-	
 	
 	say "____________________________________________________________________________________";
 	printf " %-12s %-12s %-12s %-s\n", "INFO", "TUMOUR", "NORMAL", "EXPLAINER";
@@ -338,23 +356,28 @@ sub get_variant {
 
 
 sub chrom_filter {
-	my( $chrom1, $chrom2, $filter_reasons ) = @_;
+	my $file = shift;
 	
-	if ($chrom2 eq '0'){
-		$chrom2 =$chrom1;
-	}
-	
+	my ($SVs, $info) = typer($file);
+		
 	my @keys = qw / 2L 2R 3L 3R 4 X Y /;
 	my %chrom_filt;
+
 	$chrom_filt{$_} = 1 for (@keys);
 	
-	if ($chrom_filt{$chrom1} and $chrom_filt{$chrom2}){
-		return $chrom_filt{$chrom1};
+	for ( keys %{ $SVs } ){
+    	my ($chr, $start, $id, $ref, $alt, $quality_score, $filt, $info_block, $format_block, $tumour_info_block, $normal_info_block, $sv_type, $SV_length, $stop, $chr2, $SR, $PE, $filter_reasons) = @{ $SVs->{$_} };
+	
+		if ($chr2 eq '0'){
+			$chr2 =$chr;
+		}
+	
+		if (not $chrom_filt{$chr} or not $chrom_filt{$chr2}){
+			push @{ $filter_reasons }, 'chrom1=' . $chr . ';chrom2=' . $chr2;
+			delete $SVs->{$id};
+		}
 	}
-	else {
-		push @{ $filter_reasons }, 'chrom1=' . $chrom1 . ';chrom2=' . $chrom2;
-		print Dumper \$filter_reasons;
-	}
+	return (\%$SVs, $info);
 }
 
 

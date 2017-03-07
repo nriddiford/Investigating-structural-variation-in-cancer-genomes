@@ -1,0 +1,7 @@
+2L	10278105	10278649	5	stroke_thickness=0,type=del
+2L	12510180	21219560	4	type=del
+2L	17721731	21244685	4	type=dup
+3L	11176859	11177434	4	type=del
+4	561809	562432	4	type=dup
+X	3753056	3761040	6	stroke_thickness=0,type=del
+X	4586393	4588700	4	type=del

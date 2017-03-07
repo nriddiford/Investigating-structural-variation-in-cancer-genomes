@@ -1,0 +1,7 @@
+chr - 2L 2L 0 23513712 blues-7-seq-7
+chr - 2R 2R 0 25286936 blues-7-seq-6
+chr - 3L 3L 0 28110227 blues-7-seq-5
+chr - 3R 3R 0 32079331 blues-7-seq-4
+chr - X X 0 23542271 blues-7-seq-3
+chr - Y	Y 0 3667352 blues-7-seq-2
+chr - 4	4 0 1348131 blues-7-seq-1

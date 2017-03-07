@@ -1,0 +1,3 @@
+	Inf	-Inf	
+X	chrY	chr2L	chr3L
+NA			

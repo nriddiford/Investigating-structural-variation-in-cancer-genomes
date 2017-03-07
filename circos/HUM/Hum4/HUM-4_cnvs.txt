@@ -1,0 +1,4 @@
+cnv	chromosome	start	end	size	log2	p.value
+CNVR_1	chr	Inf	-Inf	-Inf		
+CNVR_0	chrX	chrY	chr2L	chr2R	chr3L	chr3R	chr4	5001	32085000	32080000	
+NA	NA

@@ -1,0 +1,14 @@
+2L	3697091	3697537	4	type=del
+2L	18621044	18621543	7	stroke_thickness=0,type=del
+2R	2845138	4710171	4	type=del
+2R	15472433	15472826	4	type=del
+3L	42620	42983	4	type=del
+3L	375301	375333	6	stroke_thickness=0,type=del
+3L	3141077	3141110	6	stroke_thickness=0,type=del
+3L	9904128	9904156	6	stroke_thickness=0,type=del
+3L	18464535	18464572	5	stroke_thickness=0,type=del
+3L	18582268	18582298	5	stroke_thickness=0,type=del
+3L	20580082	20580113	4	type=del
+3R	28340874	28340888	5	stroke_thickness=0,type=del
+3R	31412763	31412799	5	stroke_thickness=0,type=del
+3R	19770265	31684938	4	type=del

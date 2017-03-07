@@ -53,7 +53,9 @@ sub usage {
     say "Usage: $0 [options]";
 	say "  --vcf = VCF file for parsing";
 	say "  --id = extract information for a given variant";
-	say "  --dump = dump contents of VCF file";
+	say "  --dump = cycle through all variants (can be combined with both -f and -c)";
+	say "  --filter = apply filters and mark filtered variants";
+	say "  --chromosome = used in conjunction with --dump will cycle though variants on chromosome speciified in -c";
 	say "  --help\n";
 	say "Nick Riddiford 2017";
 }

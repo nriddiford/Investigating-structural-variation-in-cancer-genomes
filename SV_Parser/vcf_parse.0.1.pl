@@ -14,12 +14,14 @@ my $help;
 my $id;
 my $dump;
 my $filter;
+my $chromosome;
 
 # Should add score threshold option
 GetOptions( 'vcf=s'	        	=>		\$vcf_file,
 			'id=s'				=>		\$id,
-			# 'dump'				=>		\$dump,
+			'dump'				=>		\$dump,
 			'filter'			=>		\$filter,
+			'chromosome=s'		=>		\$chromosome,
 			'help'              =>      \$help
 	  ) or die usage();
 
@@ -31,16 +33,19 @@ if (not $vcf_file) {
 
 
 # Retun SV and info hashes 
-my ($SVs, $info, $filter_reasons) = VCF_1_0::typer($vcf_file);
+my ( $SVs, $info ) = VCF_1_0::typer($vcf_file);
 
 # Print all infor for specified id
 
 
-VCF_1_0::summarise_variants($SVs, $filter_reasons) unless $id;
+VCF_1_0::summarise_variants( $SVs, $filter ) unless $id or $dump;
 
 # Print all infor for specified id
 
-VCF_1_0::get_variant($id, $SVs, $info) if $id;
+VCF_1_0::get_variant( $id, $SVs, $info, $filter ) if $id;
+
+# Dump all variants to screen
+VCF_1_0::dump_variants( $SVs, $info, $filter, $chromosome ) if $dump;
 
 
 sub usage {

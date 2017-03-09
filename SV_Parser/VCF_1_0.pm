@@ -110,7 +110,7 @@ sub parse {
 		
 		for my $normal (@normals){
 			if ($sample_info{$id}{$normal}{'GT'} eq '1/1' or $sample_info{$id}{$normal}{'GT'} eq '0/1'){
-				push @filter_reasons, "normal_not_homo_ref=" . $sample_info{$id}{$normal}{'GT'};
+				push @filter_reasons, "$normal\_not_homo_ref=" . $sample_info{$id}{$normal}{'GT'};
 			}
 		}
 		
@@ -370,7 +370,7 @@ sub get_variant {
 	my ($chr, $start, $id, $ref, $alt, $quality_score, $filt, $info_block, $format_block, $tumour_info_block, $normal_info_block, $sv_type, $SV_length, $stop, $chr2, $SR, $PE, $filters, $samples ) = @{ $SVs->{$id_lookup} };
     
 	my @filter_reasons = @{ $filters };
-	
+		
 	my @samples = @{ $samples };
 	
 	if (scalar @filter_reasons > 0 and $filter_flag){
@@ -450,7 +450,7 @@ sub dump_variants {
 	
 		
 		my @filter_reasons = @{ $filters };
-		
+				
 		my @samples = @{ $samples };
 		
 		if (scalar @filter_reasons > 0 ){

@@ -32,15 +32,16 @@ sub parse {
 	open my $in, '<', $file or die $!;
 
 	my @header;
-	my %SVs;
+	
+	my (%SVs, %info);
+	
 	my ($tumour_name, $control_name);
-	my %info;
-	my (@format_long, @info_long, @info_available);
+	
+	my %format_long;
 
-	my %info_block;
+	my %info_long;
 	my $filter_count;
 
-	my %sample_info;
 	my @samples;
 	
 	while(<$in>){
@@ -50,14 +51,16 @@ sub parse {
 	 		push @header, $_;
 
 			if (/##FORMAT/){
-
-				push @format_long, $_ =~ /\"(.*?)\"/;
+				
+				my ($format_long) = $_ =~ /\"(.*?)\"/;
+				my ($available_format_info) = $_ =~ /ID=(.*?),/;
+				$format_long{$available_format_info} = $format_long;
 			}
 
 			if (/##INFO/) {
 				my ($info_long) = $_ =~ /\"(.*?)\"/;
 				my ($available_info) = $_ =~ /ID=(.*?),/;
-				$info_block{$available_info} = $info_long;
+				$info_long{$available_info} = $info_long;
 			}
 			next;
 		}
@@ -65,21 +68,57 @@ sub parse {
 		if (/^#{1}/){
 			my @split = split;
 			push @samples, $_ foreach @split[9..$#split];
- 			$tumour_name 	= (split)[9];
- 			$control_name 	= (split)[10];
+ 			
+			$tumour_name = $samples[0];
+			$control_name = $samples[1];
 			next;
 		}
 
 		my @fields = split;
-	    my ($chr, $start, $id, $ref, $alt, $quality_score, $filt, $info_block, $format_block, $tumour_info_block, $normal_info_block) = @fields;
+				
+	    my ($chr, $start, $id, $ref, $alt, $quality_score, $filt, $info_block, $format_block, @sample_info) = @fields;
 
-	    my @tumour_parts 	= split(/:/, $tumour_info_block);
-	    my @normal_parts 	= split(/:/, $normal_info_block);
-		my @format 		 	= split(/:/, $format_block);
+ 		my %sample_parts;
+
+ 		push @{$sample_parts{$samples[$_]}}, split(/:/, $sample_info[$_]) for 0..$#samples;
 		
+		my @tumour_parts 	= split(/:/, $sample_info[0]);
+	    my @normal_parts 	= split(/:/, $sample_info[1]);
+						
+		my @format 		 	= split(/:/, $format_block);
 		my @info_parts		= split(/;/, $info_block);
 		
+		my %sample_info;
+		
+		for my $sample (@samples){
+
+			for my $info (0..$#format){
+				$sample_info{$id}{$sample}{$format[$info]} = $sample_parts{$sample}[$info];
+			}
+			
+		}
+								
+ 		my @normals = @samples[1..$#samples];
+		
+		my @filter_reasons;
+		
+		###################
+		# Genotype filter #
+		###################
+		
+		# Filter if ANY of the controls are NOT 'GT = 0/0' (hom ref) 
+		
+		for my $normal (@normals){
+			if ($sample_info{$id}{$normal}{'GT'} eq '1/1' or $sample_info{$id}{$normal}{'GT'} eq '0/1'){
+				push @filter_reasons, "normal_not_homo_ref=" . $sample_info{$id}{$normal}{'GT'};
+			}
+		}
+		
+		my %information;
+		
+					
 		foreach(@info_parts){
+			
 			my ($info_key, $info_value);
 
 			if (/=/){
@@ -90,110 +129,119 @@ sub parse {
 				($info_key) = $_ =~ /(.*)/;
 				$info_value = "TRUE";
 			}
-			$sample_info{$info_key} = $info_value;
+			$information{$id}{$info_key} = $info_value;
 		}
-		
+				
 	    my ($SV_type) = $info_block =~ /SVTYPE=(.*?);/;
-				
-		my $non_hom_control_flag = 0;
-		
-		my ($t_GT, $c_GT);
-		
-		my @filter_reasons;
-	
-		for ( my $i = 0; $i <= $#format; $i++ ){
-			
-			if ( $format[$i] eq 'GT' ){
-				$t_GT = $tumour_parts[$i];
-								
-				if ( $normal_parts[$i] eq '1/1' or $normal_parts[$i] eq '0/1' ){
-					$non_hom_control_flag = 1;
-					
-					push @filter_reasons, 'control_gt=' . $normal_parts[$i];
-				}
-				
-			}
-		}
 				
 		my ($SV_length, $chr2, $stop, $t_SR, $t_PE, $filters);
 		
 		if ($type eq 'lumpy'){
-			( $SV_length, $chr2, $stop, $t_SR, $t_PE, $filters ) = lumpy($info_block, $SV_type, $alt, $start, \@format, \@tumour_parts, \@normal_parts, \@filter_reasons);
+			( $SV_length, $chr2, $stop, $t_SR, $t_PE, $filters ) = lumpy( $id, $info_block, $SV_type, $alt, $start, \%sample_info, $tumour_name, $control_name, \@samples, \@normals, \@filter_reasons );
 		}
 		
 		elsif ($type eq 'delly'){
-			( $SV_length, $chr2, $stop, $t_SR, $t_PE, $filters ) = delly($info_block, $start, $SV_type, \@filter_reasons);
+			( $SV_length, $chr2, $stop, $t_SR, $t_PE, $filters ) = delly( $info_block, $start, $SV_type, \@filter_reasons );
 		}
 		
-		$filters = chrom_filter($chr, $chr2, $filters );
+		$filters = chrom_filter( $chr, $chr2, $filters );
+				
+		$SVs{$id} = [ @fields[0..10], $SV_type, $SV_length, $stop, $chr2, $t_SR, $t_PE, $filters, \@samples ];
 		
- 	   					
-		$SVs{$id} = [ @fields[0..10], $SV_type, $SV_length, $stop, $chr2, $t_SR, $t_PE, $filters ];
-		
-		$info{$id} = [ [@format], [@format_long], [@info_long], [@tumour_parts], [@normal_parts], [%sample_info], [%info_block] ];
+		$info{$id} = [ [@format], [%format_long], [%info_long], [@tumour_parts], [@normal_parts], [%information], [%sample_info] ];
 			
 	}	
 	return (\%SVs, \%info);
 }
 		
 sub lumpy {
-	my ( $info_block, $SV_type, $alt, $start, $format, $tumour_parts, $normal_parts, $filters ) = @_;
+	my ( $id, $info_block, $SV_type, $alt, $start, $sample_info, $tumour, $control, $samples, $normals, $filters ) = @_;
 	
 	my @filter_reasons = @{ $filters };
+	my @normals = @{ $normals };
 	
+	my @samples = @{ $samples };
+	
+	my %sample_info = %{ $sample_info };
+		
+		
 	my ($SV_length) = $info_block =~ /SVLEN=(.*?);/;
 	
 			
-		my ($t_PE, $t_SR, $c_PE, $c_SR);
-		my ($t_DP, $c_DP);
+		my ($t_PE, $t_SR, $all_c_PE, $all_c_SR, $c_PE, $c_SR) = (0,0,0,0,0,0);
 		
-		my $depth_flag = 0;
-
-		for ( my $i = 0; $i <= $#{ $format }; $i++ ){
+		########################
+		# Read support filters #
+		########################
 		
-			if ( $format->[$i] eq 'PE' ) {
-				$t_PE = $tumour_parts->[$i];
-				$c_PE = $normal_parts->[$i];
-			}
-			
-			elsif ( $format->[$i] eq 'SR' ){
-				$t_SR = $tumour_parts->[$i];
-				$c_SR = $normal_parts->[$i];
-			}
-				
-			elsif ( $format->[$i] eq 'DP' ){
-				$t_DP = $tumour_parts->[$i];
-				$c_DP = $normal_parts->[$i];
-				
-				# Flag if either control or tumour has depth < 10 at site
-				if ( $t_DP <= 10 ){
-					push @filter_reasons, 'tumour_depth=' . $t_DP;
-				}
-				
-				elsif ( $c_DP <= 10 ){
-					push @filter_reasons, 'control_depth=' . $c_DP;	
-				}
-			
-			}		
-		}
-			
-		my $tumour_read_support = ($t_PE + $t_SR);		
-		my $control_read_support = ($c_PE + $c_SR);
+		# Get read support for tumour
+		$t_PE = $sample_info{$id}{$tumour}{'PE'};
+		$t_SR = $sample_info{$id}{$tumour}{'SR'};
 		
-		my $sc_control_read_support = $control_read_support + 0.001;
+		my $tumour_read_support = ( $t_PE + $t_SR );
+		
+		# Create temp pseudo counts to avoid illegal division by 0
 		my $sc_tumour_read_support = $tumour_read_support + 0.001;
-				
-		# Filters:
-		if ($tumour_read_support <= 3) {
-			push @filter_reasons, 'tumour_reads=' . $tumour_read_support;
-		}
-			
-		# Filter if # tumour reads supporting var is less than 5 * control reads 
-		# Or if there are more than 2 control reads 
-		if ( ($sc_control_read_support/$sc_tumour_read_support) > 0.2 or $sc_control_read_support > 2 ) {
-			push @filter_reasons, 'control_reads=' . $control_read_support;
-		}		
 		
+		
+		# Anything with less than 4 supporting reads is filtered
+		if ($tumour_read_support <= 3) {
+			push @filter_reasons, 'tumour_reads<4=' . $tumour_read_support;
+		}
+		
+		# for precise variants:
+		if ($info_block !~ /IMPRECISE;/){
+						
+			# We want to be strict, so include all controls used for genotyping (and sum read support)
+			for my $normal (@normals){
+				$sample_info{$id}{$normal}{'PE'} eq '.' ? $sample_info{$id}{$normal}{'PE'} = '0' : $all_c_PE += $sample_info{$id}{$normal}{'PE'};
+				$sample_info{$id}{$normal}{'SR'} eq '.' ? $sample_info{$id}{$normal}{'SR'} = '0' : $all_c_SR += $sample_info{$id}{$normal}{'SR'};			
+			}
+	
+			my $all_control_read_support = ( $all_c_PE + $all_c_SR );
+						
+			# Filter if # tumour reads supporting var is less than 5 * control reads
+			# Or if there are more than 2 control reads
+			if ( $all_control_read_support > 0 ){
+				push @filter_reasons, 'precise_var_with_normal_read_support=' . $all_control_read_support;
+			}
+		}
+		
+		# for imprecise variants:
+		if ($info_block =~ /IMPRECISE;/){
+						
+			# Filter if # tumour reads supporting var is less than 5 * control reads
+			# Or if there are more than 2 control reads
+			
+			# Get read support for direct control
+			$c_PE =  $sample_info{$id}{$control}{'PE'};
+			$c_SR =  $sample_info{$id}{$control}{'SR'};
+	
+			my $direct_control_read_support = ( $c_PE + $c_SR );
+			my $sc_direct_control_read_support = $direct_control_read_support + 0.001;
+			
+			if ( $direct_control_read_support > 1 ){
+				push @filter_reasons, "imprecise_var_with_$control\_read_support>1=" . $direct_control_read_support;
+			}
+			
+		}
+		
+		######################
+		# Read depth filters #
+		######################
+		
+		my $t_DP =  $sample_info{$id}{$tumour}{'DP'};
+		my $c_DP =  $sample_info{$id}{$control}{'DP'};
+			
+		# Flag if either control or tumour has depth < 10 at site
+		if ( $t_DP <= 10 ){
+			push @filter_reasons, 'tumour_depth<10=' . $t_DP;
+		}
+
+		if ( $c_DP <= 10 ){
+			push @filter_reasons, 'control_depth<10=' . $c_DP;
+		}
+				
 		my ($chr2, $stop) = 0,0;
 
 		if ($SV_type eq 'BND'){
@@ -300,7 +348,6 @@ sub summarise_variants {
 	}	
 }
 
-
 sub get_variant {
 	
 	my ($id_lookup, $SVs, $info, $filter_flag) = @_;
@@ -311,17 +358,20 @@ sub get_variant {
 	}
 	
 	my (@format) 		= @{ $info->{$id_lookup}->[0]};
-	my (@format_long) 	= @{ $info->{$id_lookup}->[1]};
-	my (@info_long)		= @{ $info->{$id_lookup}->[2]};
+	my (%format_long) 	= @{ $info->{$id_lookup}->[1]}; #
+	my (%info_long)		= @{ $info->{$id_lookup}->[2]};
+	
 	my (@tumour_parts) 	= @{ $info->{$id_lookup}->[3]};
 	my (@normal_parts) 	= @{ $info->{$id_lookup}->[4]};
-	my (%sample_info)	= @{ $info->{$id_lookup}->[5]};
-	my (%info_block)	= @{ $info->{$id_lookup}->[6]};
 	
-			
-	my ($chr, $start, $id, $ref, $alt, $quality_score, $filt, $info_block, $format_block, $tumour_info_block, $normal_info_block, $sv_type, $SV_length, $stop, $chr2, $SR, $PE, $filters) = @{ $SVs->{$id_lookup} };
+	my (%information)	= @{ $info->{$id_lookup}->[5]};
+	my (%sample_info)	= @{ $info->{$id_lookup}->[6]};
+					
+	my ($chr, $start, $id, $ref, $alt, $quality_score, $filt, $info_block, $format_block, $tumour_info_block, $normal_info_block, $sv_type, $SV_length, $stop, $chr2, $SR, $PE, $filters, $samples ) = @{ $SVs->{$id_lookup} };
     
 	my @filter_reasons = @{ $filters };
+	
+	my @samples = @{ $samples };
 	
 	if (scalar @filter_reasons > 0 and $filter_flag){
 	say "\n______________________________________________";	
@@ -344,20 +394,28 @@ sub get_variant {
 	say "REF:    $ref";
 	say "ALT:    $alt";
 	
-	say "____________________________________________________________________________________";
-	printf " %-12s %-12s %-12s %-s\n", "INFO", "TUMOUR", "NORMAL", "EXPLAINER";
-	say "____________________________________________________________________________________";
-	 
 	
-	for (my $i = 0; $i <= $#format; $i++){
-		printf " %-12s %-12s %-12s %-s \n", $format[$i], $tumour_parts[$i], $normal_parts[$i], $format_long[$i];
+	say "__________________________________________________________________________________________________________________";
+	printf "%-20s", "INFO";
+	printf "%-20s", $_ for @samples;
+	printf "%-s\n", "EXPLAINER";
+	say "__________________________________________________________________________________________________________________";
+	
+	foreach my $format_block (@format){
+		printf "%-20s", "$format_block";
+		foreach (@samples){
+			printf "%-20s", "$sample_info{$id_lookup}{$_}{$format_block}";
+		}
+		printf "%-s", "$format_long{$format_block}";
+		print "\n";
 	}
+
 	say "____________________________________________________________________________________";
-	printf " %-12s %-12s %-s\n", "INFO", "VALUE", "EXPLAINER";
+	printf "%-20s %-20s %-s\n", "INFO", "VALUE", "EXPLAINER";
 	say "____________________________________________________________________________________";
-	
-	for (sort keys %sample_info){
-		printf " %-12s %-12s %-s \n", $_, $sample_info{$_}, $info_block{$_};
+
+	for (sort keys $information{$id_lookup}){
+		printf "%-20s %-20s %-s\n", $_, $information{$id_lookup}{$_}, $info_long{$_};
 	}
 	say "____________________________________________________________________________________";
 		
@@ -374,20 +432,26 @@ sub dump_variants {
 				@{ $SVs->{$a}}[1] <=> @{ $SVs->{$b}}[1] 
 			}  keys %{ $SVs } ){
 		
-		my ( $chr, $start, $id, $ref, $alt, $quality_score, $filt, $info_block, $format_block, $tumour_info_block, $normal_info_block, $sv_type, $SV_length, $stop, $chr2, $SR, $PE, $filters ) = @{ $SVs->{$_} };
+		my ( $chr, $start, $id, $ref, $alt, $quality_score, $filt, $info_block, $format_block, $tumour_info_block, $normal_info_block, $sv_type, $SV_length, $stop, $chr2, $SR, $PE, $filters, $samples ) = @{ $SVs->{$_} };
 		
 		if ($chromosome){
 			next if $chr ne $chromosome;
 		}
 		
 		my (@format) 		= @{ $info->{$_}->[0]};
-		my (@format_long) 	= @{ $info->{$_}->[1]};
-		my (@info_long)		= @{ $info->{$_}->[2]};
+		my (%format_long) 	= @{ $info->{$_}->[1]}; #
+		my (%info_long)		= @{ $info->{$_}->[2]};
+	
 		my (@tumour_parts) 	= @{ $info->{$_}->[3]};
 		my (@normal_parts) 	= @{ $info->{$_}->[4]};
-		my (%sample_info)	= @{ $info->{$_}->[5]};
-		my (%info_block)	= @{ $info->{$_}->[6]};
+	
+		my (%information)	= @{ $info->{$_}->[5]};
+		my (%sample_info)	= @{ $info->{$_}->[6]};
+	
+		
 		my @filter_reasons = @{ $filters };
+		
+		my @samples = @{ $samples };
 		
 		if (scalar @filter_reasons > 0 ){
 			next if $filter_flag;
@@ -421,20 +485,27 @@ sub dump_variants {
 			say "REF:    $ref";
 			say "ALT:    $alt";
 			
-			say "____________________________________________________________________________________";
-			printf " %-12s %-12s %-12s %-s\n", "INFO", "TUMOUR", "NORMAL", "EXPLAINER";
-			say "____________________________________________________________________________________";
-			 
-			
-			for (my $i = 0; $i <= $#format; $i++){
-				printf " %-12s %-12s %-12s %-s \n", $format[$i], $tumour_parts[$i], $normal_parts[$i], $format_long[$i];
+			say "__________________________________________________________________________________________________________________";
+			printf "%-20s", "INFO";
+			printf "%-20s", $_ for @samples;
+			printf "%-s\n", "EXPLAINER";
+			say "__________________________________________________________________________________________________________________";
+	
+			foreach my $format_block (@format){
+				printf "%-20s", "$format_block";
+				foreach (@samples){
+					printf "%-20s", "$sample_info{$id}{$_}{$format_block}";
+				}
+				printf "%-s", "$format_long{$format_block}";
+				print "\n";
 			}
+
 			say "____________________________________________________________________________________";
-			printf " %-12s %-12s %-s\n", "INFO", "VALUE", "EXPLAINER";
+			printf "%-20s %-20s %-s\n", "INFO", "VALUE", "EXPLAINER";
 			say "____________________________________________________________________________________";
-			
-			for (sort keys %sample_info){
-				printf " %-12s %-12s %-s \n", $_, $sample_info{$_}, $info_block{$_};
+
+			for (sort keys $information{$id}){
+				printf "%-20s %-20s %-s\n", $_, $information{$id}{$_}, $info_long{$_};
 			}
 			say "____________________________________________________________________________________";
 	

@@ -21,6 +21,11 @@ sub typer {
 		$type = 'delly';
 		parse($file, $type);
 	}
+	# elsif (`grep "VarScan" $file`){
+	# 	say "Recognised $file as VarScan2 input";
+	# 	$type = 'varscan2';
+	# 	parse($file, $type);
+	# }
 	
 	else {
 		die "This VCF is not from lumpy or delly. Abort";
@@ -31,9 +36,9 @@ sub parse {
 	my ($file, $type) = @_;
 	open my $in, '<', $file or die $!;
 
-	my @header;
+	my @headers;
 	
-	my (%SVs, %info);
+	my (%SVs, %info, %filtered_SVs);
 	
 	my ($tumour_name, $control_name);
 	
@@ -48,7 +53,8 @@ sub parse {
 		chomp;
 
 		if (/^#{2}/){
-	 		push @header, $_;
+	 		push @headers, $_;
+			$filtered_SVs{$.} = $_;
 
 			if (/##FORMAT/){
 				
@@ -66,6 +72,8 @@ sub parse {
 		}
 
 		if (/^#{1}/){
+	 		push @headers, $_;
+			$filtered_SVs{$.} = $_;
 			my @split = split;
 			push @samples, $_ foreach @split[9..$#split];
  			
@@ -149,9 +157,36 @@ sub parse {
 		$SVs{$id} = [ @fields[0..10], $SV_type, $SV_length, $stop, $chr2, $t_SR, $t_PE, $filters, \@samples ];
 		
 		$info{$id} = [ [@format], [%format_long], [%info_long], [@tumour_parts], [@normal_parts], [%information], [%sample_info] ];
+		
+		if (scalar @{$filters} == 0){
+			$filtered_SVs{$.} = $_;
+		}
+
 			
 	}	
-	return (\%SVs, \%info);
+	return (\%SVs, \%info, \%filtered_SVs);
+}
+
+sub print_variants {
+	open my $out, '>', 'filtered_vars.vcf' or die $!;
+	
+	my ( $SVs, $filtered_SVs ) = @_;
+	
+	my %filtered_SVs = %{ $filtered_SVs };
+	my $sv_count = 0;
+	for (sort {$a <=> $b} keys %filtered_SVs){
+		my $line = $filtered_SVs{$_};
+				
+		if ($line =~ /^#/){
+			print $out $line . "\n"; 
+		}
+		else {
+			$sv_count++;
+			my @cols = split("\t", $line);
+			print $out join("\t", @cols[0..5], "PASS", @cols[7..$#cols]) . "\n";
+		}
+	}	
+	say "$sv_count variants passed all filters";
 }
 		
 sub lumpy {
@@ -184,10 +219,18 @@ sub lumpy {
 		my $sc_tumour_read_support = $tumour_read_support + 0.001;
 		
 		
+
 		# Anything with less than 4 supporting reads is filtered
-		if ($tumour_read_support <= 3) {
+		if ($SV_type eq 'BND' and $tumour_read_support <= 4 ){
+			push @filter_reasons, 'BND_tumour_reads<7=' . $tumour_read_support;
+
+		}
+		
+		elsif ($SV_type ne 'BND' and $tumour_read_support <= 3) {
 			push @filter_reasons, 'tumour_reads<4=' . $tumour_read_support;
 		}
+		
+
 		
 		# for precise variants:
 		if ($info_block !~ /IMPRECISE;/){
@@ -386,6 +429,7 @@ sub get_variant {
 	say "CHROM2: $chr2" if $chr2;	
 	say "START:  $start";
 	say "STOP:   $stop";
+	$chr2 eq $chr ? say "IGV:	$chr:$start-$stop" : say "IGV:	$chr:$start";
 	say "LENGTH: $SV_length";
 	say "PE:	$PE";
 	say "SR:	$SR";
@@ -477,8 +521,9 @@ sub dump_variants {
 			say "CHROM2: $chr2" if $chr2;	
 			say "START:  $start";
 			say "STOP:   $stop";
+			$chr2 ? say "IGV:   $chr:$start-$stop" : say "IGV:    $chr:$start";
 			say "LENGTH: $SV_length";
-			say "PE:	$PE";
+			say "PE:    $PE";
 			say "SR:	$SR";
 			say "QUAL:   $quality_score";
 			say "FILT:   $filt";

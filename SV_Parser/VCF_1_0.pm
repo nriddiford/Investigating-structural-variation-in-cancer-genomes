@@ -221,17 +221,11 @@ sub lumpy {
 		
 
 		# Anything with less than 4 supporting reads is filtered
-		if ($SV_type eq 'BND' and $tumour_read_support <= 4 ){
-			push @filter_reasons, 'BND_tumour_reads<7=' . $tumour_read_support;
-
-		}
-		
-		elsif ($SV_type ne 'BND' and $tumour_read_support <= 3) {
+		if ( $tumour_read_support < 4 ){
 			push @filter_reasons, 'tumour_reads<4=' . $tumour_read_support;
-		}
-		
 
-		
+		}
+			
 		# for precise variants:
 		if ($info_block !~ /IMPRECISE;/){
 						
@@ -269,6 +263,17 @@ sub lumpy {
 			
 		}
 		
+		##################
+		# Quality filter #
+		##################
+		
+		$sample_info{$id}{$tumour}{'SQ'} = 0 if $sample_info{$id}{$tumour}{'SQ'} eq '.';
+
+		if ( $sample_info{$id}{$tumour}{'SQ'} <= 10 ){
+			push @filter_reasons, "SQ=" . $sample_info{$id}{$tumour}{'SQ'};
+		}
+
+		
 		######################
 		# Read depth filters #
 		######################
@@ -284,7 +289,7 @@ sub lumpy {
 		if ( $c_DP <= 10 ){
 			push @filter_reasons, 'control_depth<10=' . $c_DP;
 		}
-				
+						
 		my ($chr2, $stop) = 0,0;
 
 		if ($SV_type eq 'BND'){
@@ -515,33 +520,33 @@ sub dump_variants {
 				say "______________________________________________\n";
 			}
 	
-			say "ID:     $id";
-			say "TYPE:   $sv_type";
-			$chr2 ? say "CHROM1: $chr" : say "CHROM:  $chr";
-			say "CHROM2: $chr2" if $chr2;	
-			say "START:  $start";
-			say "STOP:   $stop";
-			$chr2 ? say "IGV:   $chr:$start-$stop" : say "IGV:    $chr:$start";
-			say "LENGTH: $SV_length";
-			say "PE:    $PE";
-			say "SR:	$SR";
-			say "QUAL:   $quality_score";
-			say "FILT:   $filt";
-			say "REF:    $ref";
-			say "ALT:    $alt";
+			printf "%-10s %-s\n",  			"ID:", 		$id;
+			printf "%-10s %-s\n", 			"TYPE:", 	$sv_type;
+			$chr2 ? printf "%-10s %-s\n",  	"CHROM1:", 	$chr : printf "%-10s %-s\n",  "CHROM:",  $chr;
+			printf "%-10s %-s\n", 			"CHROM2:", 	$chr2 if $chr2;	
+			printf "%-10s %-s\n",   		"START:", 	$start;
+			printf "%-10s %-s\n",   		"STOP:",  	$stop;
+			$chr2 ? printf "%-10s %-s\n",   "IGV:",   	"$chr:$start" : printf "%-10s %-s\n", "IGV:", "$chr:$start-$stop";
+			printf "%-10s %-s\n", 			"LENGTH:", 	$SV_length;
+			printf "%-10s %-s\n",   		"PE:",    	$PE;
+			printf "%-10s %-s\n",   		"SR:",		$SR;
+			printf "%-10s %-s\n",   		"QUAL:",   	$quality_score;
+			printf "%-10s %-s\n",   		"FILT:",   	$filt;
+			printf "%-10s %-s\n",   		"REF:",   	$ref;
+			printf "%-10s %-s\n",   		"ALT:",   	$alt;
 			
 			say "__________________________________________________________________________________________________________________";
-			printf "%-20s", "INFO";
-			printf "%-20s", $_ for @samples;
-			printf "%-s\n", "EXPLAINER";
+			printf "%-20s", 				"INFO";
+			printf "%-20s", 				$_ for @samples;
+			printf "%-s\n", 				"EXPLAINER";
 			say "__________________________________________________________________________________________________________________";
 	
 			foreach my $format_block (@format){
-				printf "%-20s", "$format_block";
+				printf "%-20s", 			$format_block;
 				foreach (@samples){
-					printf "%-20s", "$sample_info{$id}{$_}{$format_block}";
+					printf "%-20s", 		$sample_info{$id}{$_}{$format_block};
 				}
-				printf "%-s", "$format_long{$format_block}";
+				printf "%-s", 				$format_long{$format_block};
 				print "\n";
 			}
 

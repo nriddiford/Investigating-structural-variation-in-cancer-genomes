@@ -1,8 +1,17 @@
 #!/urs/bin/perl
 
-use VCF_1_0;
+use FindBin;
+use File::Spec;
+use lib File::Spec->catdir($FindBin::Bin, '..', 'lib');
+ 
+use SV_Parser::VCF_1_0;
+
+# use VCF_1_0;
 use strict;
 use warnings;
+
+
+
 
 use feature qw/ say /;
 use Data::Dumper;

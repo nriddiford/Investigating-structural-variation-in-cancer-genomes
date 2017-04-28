@@ -70,6 +70,9 @@ plot.chrom <- function(chrom=NA, cnv_file)
   if(is.na(chrom)) {
 	  chrom <- "3R"
   	  cat("No chromosome specified - defaulting to", chrom, "\n")
+  }
+  else {
+  	  cat("Plotting", chrom, "chromosome", "\n")
   }	  
 
 	base=basename(cnv_file)
@@ -80,12 +83,13 @@ plot.chrom <- function(chrom=NA, cnv_file)
 
 	clean_file<-file.clean(read_file_in)
 
-	cols <- brewer.pal(n = 7, name = "RdBu") 
+	cols <- brewer.pal(n = 5, name = "RdBu") 
 		
 	chrom_data<-subset(clean_file, clean_file$chromosome == chrom)
 
 	p <- ggplot()
 	p <- p + geom_point(data=chrom_data, aes(x = start, y = log2, colour = log2))
+	p <- p + scale_alpha(range = c(0.1, 5))
 	p <- p + ylim(-5,5)
 	
 	p <- p + scale_colour_gradientn(colours = cols, 

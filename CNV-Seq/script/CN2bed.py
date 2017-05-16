@@ -1,3 +1,6 @@
+# This is a modified version of a script provided with LUMPY (https://github.com/arq5x/lumpy-sv/blob/master/scripts/cnvanator_to_bedpes.py)
+# This script will take CNV-Seq out put (generated with the print.cnv function) and convert it to a CNVnator style bedpe file compatible with lumpy  
+
 #!/usr/bin/env python
 import sys
 from optparse import OptionParser

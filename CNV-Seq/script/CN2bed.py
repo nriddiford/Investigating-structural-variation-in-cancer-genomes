@@ -70,7 +70,8 @@ for l in f:
     if FC < 0:
         ev = 'DELETION'
 
-    chrom = A[1]
+    chrom = A[1][3:]
+  
     start = A[2]
     end = A[3]
 
